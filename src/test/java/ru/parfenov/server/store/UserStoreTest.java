@@ -8,8 +8,6 @@ import ru.parfenov.server.model.User;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class UserStoreTest {
     static UserStore userStore = new UserStore();
     static Map<String, User> userMap = new HashMap<>();
@@ -18,7 +16,7 @@ class UserStoreTest {
     static User user2;
 
     @BeforeAll
-    static void  setUp() {
+    static void setUp() {
         userStore = new UserStore();
         userMap = new HashMap<>();
 

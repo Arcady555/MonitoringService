@@ -8,8 +8,6 @@ import ru.parfenov.server.model.User;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class MetersDataStoreTest {
     static MetersDataStore store;
     static MetersData data1;
