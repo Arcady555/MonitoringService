@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * Данный класс послужил для выделения методов для пользователя(не админа)
+ * Данный класс служит для выделения методов для пользователя(не админа)
  */
 
 public class ClientService {
@@ -174,6 +174,8 @@ public class ClientService {
             for (MetersData metersData : dataList) {
                 printDataFromDataStore(metersData);
             }
+        } else {
+            System.out.println("No data!!!" + System.lineSeparator());
         }
     }
 

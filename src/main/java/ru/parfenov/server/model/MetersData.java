@@ -8,14 +8,6 @@ public class MetersData {
     private LocalDateTime date;
     private Map<String, Integer> dataPoints = new LinkedHashMap<>();
 
-    public MetersData() {
-    }
-
-    public MetersData(LocalDateTime date, Map<String, Integer> dataPoints) {
-        this.date = date;
-        this.dataPoints = dataPoints;
-    }
-
     public LocalDateTime getDate() {
         return date;
     }
