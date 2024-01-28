@@ -189,7 +189,6 @@ public class ClientService {
      * который может выполняться только один раз и в текущем месяце.
      * Если в текущем месяце уже есть данные(актуальные, последние данные)
      * - значит ждите следующего месяца))
-     *
      * @param login
      * @return
      */
@@ -210,7 +209,6 @@ public class ClientService {
 
     /**
      * Помогает сформировать данные для отправки в хранилище
-     *
      * @param pointNumber
      * @param data
      * @param r
@@ -237,7 +235,6 @@ public class ClientService {
 
     /**
      * Распечатка данных, полученных из хранилища
-     *
      * @param data
      */
     private void printDataFromDataStore(MetersData data) {

@@ -25,7 +25,6 @@ public class OperationService {
      * Авторизация
      * Есть проверка, что юзера с таким логином нет
      * Есть проверка пароля
-     *
      * @return
      * @throws IOException
      */
@@ -37,7 +36,6 @@ public class OperationService {
     /**
      * регистрация
      * есть проверка, что юзер с таким логином уже есть
-     *
      * @throws IOException
      */
     public void reg() throws IOException {
@@ -50,7 +48,6 @@ public class OperationService {
      * Разрешена только в текущем месяце, один раз. Без редактирования.
      * Проверку выполняет метод clientService.validationOnceInMonth()
      * Допускается кроме 3х стандартных значений, ввести ещё свои какие-то показатели и заполнить их.
-     *
      * @param login
      * @throws IOException
      */
@@ -60,7 +57,6 @@ public class OperationService {
 
     /**
      * Просмотр последних заполненных данных
-     *
      * @param login
      */
 
@@ -70,7 +66,6 @@ public class OperationService {
 
     /**
      * Просмотр данных за выбранный месяц
-     *
      * @param login
      * @throws IOException
      */
@@ -80,7 +75,6 @@ public class OperationService {
 
     /**
      * Просмотр всех своих заполненных данных
-     *
      * @param login
      */
     public void viewDataHistory(String login) {
@@ -107,7 +101,6 @@ public class OperationService {
 
     /**
      * Актуальные данные нужного юзера
-     *
      * @throws IOException
      */
     public void viewLastDataOfUser() throws IOException {
@@ -118,7 +111,6 @@ public class OperationService {
 
     /**
      * Данные нужного юзера за нужный месяц
-     *
      * @throws IOException
      */
     public void viewDataForSpecMonthOfUser() throws IOException {
@@ -129,7 +121,6 @@ public class OperationService {
 
     /**
      * Посмотреть все данные нужного юзера
-     *
      * @throws IOException
      */
     public void viewDataHistoryOfUser() throws IOException {
@@ -140,7 +131,6 @@ public class OperationService {
 
     /**
      * Слежка за пользователем, фиксация по времени всех его движений на сервере
-     *
      * @throws IOException
      */
     public void viewUserHistory() throws IOException {
