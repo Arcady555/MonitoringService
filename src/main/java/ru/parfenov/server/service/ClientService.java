@@ -4,6 +4,7 @@ import ru.parfenov.server.model.MetersData;
 import ru.parfenov.server.model.User;
 import ru.parfenov.server.store.MetersDataStore;
 import ru.parfenov.server.store.UserStore;
+import ru.parfenov.utility.Utility;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,12 +24,13 @@ import java.util.Optional;
 public class ClientService {
     private final UserStore userStore;
     private final MetersDataStore dataStore;
+    private final BufferedReader r;
     StringBuilder detailsOfVisit = new StringBuilder();
-    BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
 
-    public ClientService(UserStore userStore, MetersDataStore dataStore) {
+    public ClientService(UserStore userStore, MetersDataStore dataStore, BufferedReader r) {
         this.userStore = userStore;
         this.dataStore = dataStore;
+        this.r = r;
     }
 
     public void reg() throws IOException {
@@ -53,11 +55,11 @@ public class ClientService {
     public String enter() throws IOException {
         System.out.println("Введите имя (или exit)");
         String login = r.readLine();
-        if (login.equals("exit")) {
+        if (login.equals(Utility.EXIT_WORD)) {
             return login;
         } else if (userStore.getByLogin(login) == null) {
             System.out.println("Unknown user!\n");
-            return "exit";
+            return Utility.EXIT_WORD;
         } else {
             System.out.println("Введите пароль");
             String password = r.readLine();
@@ -68,7 +70,7 @@ public class ClientService {
                         .append(System.lineSeparator());
             } else {
                 System.out.println("Not correct password!\n");
-                return "exit";
+                return Utility.EXIT_WORD;
             }
             return login;
         }
@@ -88,8 +90,8 @@ public class ClientService {
             } else if (answer.equals("2")) {
                 System.out.println("how many points will you create more?");
                 int answer2 = Integer.parseInt(r.readLine());
-                if (answer2 > 10) {
-                    System.out.println("It is too much!!! (Must be not over 10)");
+                if (answer2 > Utility.MAX_NUMBER_OF_POINTS) {
+                    System.out.println("It is too much!!! (Must be not over " + Utility.MAX_NUMBER_OF_POINTS + ")");
                     submitData(login);
                 } else {
                     printDataForSubmit(3 + answer2, data, r);

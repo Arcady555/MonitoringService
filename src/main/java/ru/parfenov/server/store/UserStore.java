@@ -1,6 +1,7 @@
 package ru.parfenov.server.store;
 
 import ru.parfenov.server.model.User;
+import ru.parfenov.utility.Utility;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,8 +11,12 @@ public class UserStore {
 
     private final Map<String, User> userMap = new HashMap<>();
 
+    /**
+     * при создании хранилища пользователей автоматически добавляется
+     * пользователь с логином admin и паролем 123(Если не менялось значение статической переменной)
+     */
     public UserStore() {
-        create("admin", "123");
+        create("admin", Utility.ADMIN_PASSWORD);
     }
 
     public Set<Map.Entry<String, User>> getAll() {

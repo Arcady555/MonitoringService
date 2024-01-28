@@ -14,17 +14,18 @@ public class OperationService {
     private final MetersDataStore dataStore = new MetersDataStore();
     private final UserStore userStore = new UserStore();
     BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
-    ClientService clientService = new ClientService(userStore, dataStore);
+    ClientService clientService = new ClientService(userStore, dataStore, r);
 
     /**
      * Данные 7 методов ниже имеют фиксацию времени
-     * Все они(кроме 1го) используются только клиентом(не админом)
+     * Все они используются только клиентом(не админом) (кроме 1го, он используется ещё и админом)
      */
 
     /**
      * Авторизация
      * Есть проверка, что юзера с таким логином нет
      * Есть проверка пароля
+     * Admin заходит с паролем 123, если не поменять значение Utility.ADMIN_PASSWORD
      * @return
      * @throws IOException
      */
@@ -48,6 +49,7 @@ public class OperationService {
      * Разрешена только в текущем месяце, один раз. Без редактирования.
      * Проверку выполняет метод clientService.validationOnceInMonth()
      * Допускается кроме 3х стандартных значений, ввести ещё свои какие-то показатели и заполнить их.
+     * Количество не превышает значения переменной Utility.MAX_NUMBER_OF_POINTS
      * @param login
      * @throws IOException
      */
