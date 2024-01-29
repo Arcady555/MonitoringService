@@ -34,6 +34,7 @@ public class ClientService {
     }
 
     public void reg() throws IOException {
+        String nameOfMethod = "registration";
         System.out.println("Create name");
         BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
         String login = r.readLine();
@@ -46,13 +47,11 @@ public class ClientService {
             dataStore.createDataList(user);
         }
         System.out.println("OK!" + System.lineSeparator());
-        detailsOfVisit.append(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
-                .append(" ")
-                .append("registration")
-                .append(System.lineSeparator());
+        fixTime(nameOfMethod, detailsOfVisit);
     }
 
     public String enter() throws IOException {
+        String nameOfMethod = "enter";
         System.out.println("Введите имя (или exit)");
         String login = r.readLine();
         if (login.equals(Utility.EXIT_WORD)) {
@@ -64,10 +63,7 @@ public class ClientService {
             System.out.println("Введите пароль");
             String password = r.readLine();
             if (password.equals(userStore.getByLogin(login).getPassword())) {
-                detailsOfVisit.append(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
-                        .append(" ")
-                        .append("enter")
-                        .append(System.lineSeparator());
+                fixTime(nameOfMethod, detailsOfVisit);
             } else {
                 System.out.println("Not correct password!\n");
                 return Utility.EXIT_WORD;
@@ -77,6 +73,7 @@ public class ClientService {
     }
 
     public void submitData(String login) throws IOException {
+        String nameOfMethod = "submit data";
         if (validationOnceInMonth(login)) {
             System.out.println("""
                     1 - Would you like to enter 3 points(heating, cool water, hot water) ?
@@ -103,30 +100,25 @@ public class ClientService {
             metersData.setDate(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES));
             dataStore.createData(userStore.getByLogin(login), metersData);
             System.out.println("OK!" + System.lineSeparator());
-            detailsOfVisit.append(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
-                    .append(" ")
-                    .append("submit data")
-                    .append(System.lineSeparator());
+            fixTime(nameOfMethod, detailsOfVisit);
         } else {
             System.out.println("This month data is already exist!!!" + System.lineSeparator());
         }
     }
 
     public void viewLastData(String login) {
+        String nameOfMethod = "view last data";
         Optional<MetersData> data = dataStore.getLastData(userStore.getByLogin(login));
         if (data.isEmpty()) {
             System.out.println("No data!!!" + System.lineSeparator());
         } else {
             printDataFromDataStore(data.get());
         }
-        detailsOfVisit.append(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
-                .append(" ")
-                .append("view last data")
-                .append(System.lineSeparator());
+        fixTime(nameOfMethod, detailsOfVisit);
     }
 
     public void viewDataForSpecMonth(String login) throws IOException {
-
+        String nameOfMethod = "view data for spec month";
         System.out.println("""
                 Which year are You interesting?
                 (Please enter the number 2015-2024)
@@ -161,13 +153,11 @@ public class ClientService {
                 }
             }
         }
-        detailsOfVisit.append(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
-                .append(" ")
-                .append("view data for spec month")
-                .append(System.lineSeparator());
+        fixTime(nameOfMethod, detailsOfVisit);
     }
 
     public void viewDataHistory(String login) {
+        String nameOfMethod = "view data history";
         Optional<List<MetersData>> dataListOptional = dataStore.findByUser(userStore.getByLogin(login));
         if (dataListOptional.isPresent()) {
             List<MetersData> dataList = dataListOptional.get();
@@ -177,13 +167,12 @@ public class ClientService {
         } else {
             System.out.println("No data!!!" + System.lineSeparator());
         }
+        fixTime(nameOfMethod, detailsOfVisit);
     }
 
     public void toOut(String login) {
-        detailsOfVisit.append(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
-                .append(" ")
-                .append("out").
-                append(System.lineSeparator());
+        String nameOfMethod = "out";
+        fixTime(nameOfMethod, detailsOfVisit);
         List<String> history = userStore.getByLogin(login).getHistory();
         history.add(detailsOfVisit.toString());
     }
@@ -246,5 +235,12 @@ public class ClientService {
         for (Map.Entry<String, Integer> point : data.getDataPoints().entrySet()) {
             System.out.println(point.getKey() + ": " + point.getValue());
         }
+    }
+
+    private void fixTime(String nameOfMethod, StringBuilder stringBuilder) {
+        stringBuilder.append(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
+                .append(" ")
+                .append(nameOfMethod)
+                .append(System.lineSeparator());
     }
 }
