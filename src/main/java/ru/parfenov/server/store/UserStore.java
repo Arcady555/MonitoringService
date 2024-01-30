@@ -1,7 +1,7 @@
 package ru.parfenov.server.store;
 
 import ru.parfenov.server.model.User;
-import ru.parfenov.utility.Utility;
+import ru.parfenov.server.utility.Utility;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -4,7 +4,7 @@ import ru.parfenov.server.model.MetersData;
 import ru.parfenov.server.model.User;
 import ru.parfenov.server.store.MetersDataStore;
 import ru.parfenov.server.store.UserStore;
-import ru.parfenov.utility.Utility;
+import ru.parfenov.server.utility.Utility;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -48,6 +48,8 @@ public class ClientService {
         }
         System.out.println("OK!" + System.lineSeparator());
         fixTime(nameOfMethod, detailsOfVisit);
+        List<String> history = userStore.getByLogin(login).getHistory();
+        history.add(detailsOfVisit.toString());
     }
 
     public String enter() throws IOException {
@@ -119,18 +121,16 @@ public class ClientService {
 
     public void viewDataForSpecMonth(String login) throws IOException {
         String nameOfMethod = "view data for spec month";
-        System.out.println("""
-                Which year are You interesting?
-                (Please enter the number 2015-2024)
-                """);
+        System.out.println("Which year are You interesting?");
+        System.out.println("Please enter the number " + Utility.FIRST_YEAR +"-" + LocalDateTime.now().getYear());
         int year = Integer.parseInt(r.readLine());
-        if (year > 2024 || year < 2015) {
+        if (year > LocalDateTime.now().getYear() || year < Utility.FIRST_YEAR) {
             System.out.println("Please enter correct" + System.lineSeparator());
             viewDataForSpecMonth(login);
         } else {
             System.out.println("""
                     Which month are You interesting?
-                    (Please enter the number 01-12)
+                    (Please enter the number 1-12)
                     """);
             int month = Integer.parseInt(r.readLine());
             if (month > 12 || month < 1) {

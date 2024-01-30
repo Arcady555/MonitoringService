@@ -1,7 +1,7 @@
 package ru.parfenov.server.controller;
 
 import ru.parfenov.server.service.OperationService;
-import ru.parfenov.utility.Utility;
+import ru.parfenov.server.utility.Utility;
 
 import java.io.IOException;
 
