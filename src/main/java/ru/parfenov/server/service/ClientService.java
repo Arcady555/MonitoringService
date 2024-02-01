@@ -8,7 +8,6 @@ import ru.parfenov.server.utility.Utility;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.temporal.ChronoUnit;
@@ -24,25 +23,24 @@ import java.util.Optional;
 public class ClientService {
     private final UserStore userStore;
     private final MetersDataStore dataStore;
-    private final BufferedReader r;
+    private final BufferedReader reader;
     StringBuilder detailsOfVisit = new StringBuilder();
 
-    public ClientService(UserStore userStore, MetersDataStore dataStore, BufferedReader r) {
+    public ClientService(UserStore userStore, MetersDataStore dataStore, BufferedReader reader) {
         this.userStore = userStore;
         this.dataStore = dataStore;
-        this.r = r;
+        this.reader = reader;
     }
 
     public void reg() throws IOException {
         String nameOfMethod = "registration";
         System.out.println("Create name");
-        BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
-        String login = r.readLine();
+        String login = reader.readLine();
         if (userStore.getByLogin(login) != null) {
             System.out.println("User is already exist!\n");
         } else {
             System.out.println("Create password");
-            String password = r.readLine();
+            String password = reader.readLine();
             User user = userStore.create(login, password);
             dataStore.createDataList(user);
         }
@@ -55,7 +53,7 @@ public class ClientService {
     public String enter() throws IOException {
         String nameOfMethod = "enter";
         System.out.println("Введите имя (или exit)");
-        String login = r.readLine();
+        String login = reader.readLine();
         if (login.equals(Utility.EXIT_WORD)) {
             return login;
         } else if (userStore.getByLogin(login) == null) {
@@ -63,7 +61,7 @@ public class ClientService {
             return Utility.EXIT_WORD;
         } else {
             System.out.println("Введите пароль");
-            String password = r.readLine();
+            String password = reader.readLine();
             if (password.equals(userStore.getByLogin(login).getPassword())) {
                 fixTime(nameOfMethod, detailsOfVisit);
             } else {
@@ -75,36 +73,42 @@ public class ClientService {
     }
 
     public void submitData(String login) throws IOException {
-        String nameOfMethod = "submit data";
-        if (validationOnceInMonth(login)) {
-            System.out.println("""
+        try {
+            String nameOfMethod = "submit data";
+            if (validationOnceInMonth(login)) {
+                System.out.println("""
                     1 - Would you like to enter 3 points(heating, cool water, hot water) ?
                     2 - Would you like to enter more points ?
                     """);
-            String answer = r.readLine();
-            MetersData metersData = new MetersData();
-            Map<String, Integer> data = metersData.getDataPoints();
-            if (answer.equals("1")) {
-                printDataForSubmit(3, data, r);
-            } else if (answer.equals("2")) {
-                System.out.println("how many points will you create more?");
-                int answer2 = Integer.parseInt(r.readLine());
-                if (answer2 > Utility.MAX_NUMBER_OF_POINTS) {
-                    System.out.println("It is too much!!! (Must be not over " + Utility.MAX_NUMBER_OF_POINTS + ")");
-                    submitData(login);
+                String answer = reader.readLine();
+                MetersData metersData = new MetersData();
+                Map<String, Integer> data = metersData.getDataPoints();
+                if (answer.equals("1")) {
+                    printDataForSubmit(3, data, reader);
+                } else if (answer.equals("2")) {
+                    System.out.println("how many points will you create more?");
+
+                    int answer2 = Integer.parseInt(reader.readLine());
+                    if (answer2 > Utility.MAX_NUMBER_OF_POINTS) {
+                        System.out.println("It is too much!!! (Must be not over " + Utility.MAX_NUMBER_OF_POINTS + ")");
+                        submitData(login);
+                    } else {
+                        printDataForSubmit(3 + answer2, data, reader);
+                    }
                 } else {
-                    printDataForSubmit(3 + answer2, data, r);
+                    System.out.println("Please enter correct" + System.lineSeparator());
+                    submitData(login);
                 }
+                metersData.setDate(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES));
+                dataStore.createData(userStore.getByLogin(login), metersData);
+                System.out.println("OK!" + System.lineSeparator());
+                fixTime(nameOfMethod, detailsOfVisit);
             } else {
-                System.out.println("Please enter correct" + System.lineSeparator());
-                submitData(login);
+                System.out.println("This month data is already exist!!!" + System.lineSeparator());
             }
-            metersData.setDate(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES));
-            dataStore.createData(userStore.getByLogin(login), metersData);
-            System.out.println("OK!" + System.lineSeparator());
-            fixTime(nameOfMethod, detailsOfVisit);
-        } else {
-            System.out.println("This month data is already exist!!!" + System.lineSeparator());
+        } catch (NumberFormatException e) {
+            System.out.println("Enter correct!!!" + System.lineSeparator());
+            submitData(login);
         }
     }
 
@@ -123,7 +127,7 @@ public class ClientService {
         String nameOfMethod = "view data for spec month";
         System.out.println("Which year are You interesting?");
         System.out.println("Please enter the number " + Utility.FIRST_YEAR +"-" + LocalDateTime.now().getYear());
-        int year = Integer.parseInt(r.readLine());
+        int year = Integer.parseInt(reader.readLine());
         if (year > LocalDateTime.now().getYear() || year < Utility.FIRST_YEAR) {
             System.out.println("Please enter correct" + System.lineSeparator());
             viewDataForSpecMonth(login);
@@ -132,26 +136,32 @@ public class ClientService {
                     Which month are You interesting?
                     (Please enter the number 1-12)
                     """);
-            int month = Integer.parseInt(r.readLine());
-            if (month > 12 || month < 1) {
-                System.out.println("Please enter correct" + System.lineSeparator());
+            try {
+                int month = Integer.parseInt(reader.readLine());
+                if (month > 12 || month < 1) {
+                    System.out.println("Please enter correct" + System.lineSeparator());
+                    viewDataForSpecMonth(login);
+                } else {
+                    String dateString;
+                    if (month < 10) {
+                        dateString = year + "-0" + month + "-01T01:01:01";
+                    } else {
+                        dateString = year + "-" + month + "-01T01:01:01";
+                    }
+                    LocalDateTime date = LocalDateTime.parse(dateString);
+                    Optional<MetersData> data = dataStore.getDataForSpecMonth(userStore.getByLogin(login), date);
+                    if (data.isEmpty()) {
+                        System.out.println("No data!!!" + System.lineSeparator());
+                    } else {
+                        printDataFromDataStore(data.get());
+                        System.out.println(System.lineSeparator());
+                    }
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Enter correct!!!" + System.lineSeparator());
                 viewDataForSpecMonth(login);
-            } else {
-                String dateString;
-                if (month < 10) {
-                    dateString = year + "-0" + month + "-01T01:01:01";
-                } else {
-                    dateString = year + "-" + month + "-01T01:01:01";
-                }
-                LocalDateTime date = LocalDateTime.parse(dateString);
-                Optional<MetersData> data = dataStore.getDataForSpecMonth(userStore.getByLogin(login), date);
-                if (data.isEmpty()) {
-                    System.out.println("No data!!!" + System.lineSeparator());
-                } else {
-                    printDataFromDataStore(data.get());
-                    System.out.println(System.lineSeparator());
-                }
             }
+
         }
         fixTime(nameOfMethod, detailsOfVisit);
     }

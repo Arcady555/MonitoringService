@@ -13,8 +13,8 @@ import java.util.Map;
 public class OperationService {
     private final MetersDataStore dataStore = new MetersDataStore();
     private final UserStore userStore = new UserStore();
-    BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
-    ClientService clientService = new ClientService(userStore, dataStore, r);
+    BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    ClientService clientService = new ClientService(userStore, dataStore, reader);
 
     /**
      * Данные 7 методов ниже имеют фиксацию времени
@@ -107,7 +107,7 @@ public class OperationService {
      */
     public void viewLastDataOfUser() throws IOException {
         System.out.println("Enter login of user");
-        String login = r.readLine();
+        String login = reader.readLine();
         viewLastData(login);
     }
 
@@ -117,7 +117,7 @@ public class OperationService {
      */
     public void viewDataForSpecMonthOfUser() throws IOException {
         System.out.println("Enter login of user");
-        String login = r.readLine();
+        String login = reader.readLine();
         viewDataForSpecMonth(login);
     }
 
@@ -127,7 +127,7 @@ public class OperationService {
      */
     public void viewDataHistoryOfUser() throws IOException {
         System.out.println("Enter login of user");
-        String login = r.readLine();
+        String login = reader.readLine();
         viewDataHistory(login);
     }
 
@@ -137,7 +137,7 @@ public class OperationService {
      */
     public void viewUserHistory() throws IOException {
         System.out.println("Enter login of user");
-        String login = r.readLine();
+        String login = reader.readLine();
         User user = userStore.getByLogin(login);
         List<String> history = user.getHistory();
         if (history.isEmpty()) {

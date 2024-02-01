@@ -18,40 +18,26 @@ public class MetersDataStore {
     }
 
     public Optional<List<MetersData>> findByUser(User user) {
-        Optional<List<MetersData>> rslOptional = Optional.empty();
-        List<MetersData> rsl = store.get(user);
-        if (rsl != null) {
-            rslOptional = Optional.of(rsl);
-        }
-        return rslOptional;
+        return Optional.ofNullable(store.get(user));
     }
 
     public Optional<MetersData> getLastData(User user) {
-        Optional<MetersData> rsl = Optional.empty();
-        Optional<List<MetersData>> listOptional = findByUser(user);
-        if (listOptional.isPresent()) {
-            List<MetersData> list = listOptional.get();
-            if (list.size() != 0) {
-                rsl = Optional.of(list.get(list.size() - 1));
-            }
-        }
-        return rsl;
+        List<MetersData> list = findByUser(user).isPresent() ? findByUser(user).get() : null;
+        return list != null && list.size() != 0 ? Optional.of(list.get(list.size() - 1)) : Optional.empty();
     }
 
     public Optional<MetersData> getDataForSpecMonth(User user, LocalDateTime date) {
-        Optional<MetersData> rsl = Optional.empty();
-        Optional<List<MetersData>> listOptional = findByUser(user);
-        if (listOptional.isPresent()) {
-            List<MetersData> list = listOptional.get();
-            if (list.size() != 0) {
-                for (MetersData element : list) {
-                    if (element.getDate().getMonth().equals(date.getMonth()) &&
-                            element.getDate().getYear() == date.getYear()) {
-                        rsl = Optional.of(element);
-                    }
+        Optional<MetersData> result = Optional.empty();
+        List<MetersData> list = findByUser(user).isPresent() ? findByUser(user).get() : null;
+        if (list != null && list.size() != 0) {
+            for (MetersData element : list) {
+                if (element.getDate().getMonth().equals(date.getMonth()) &&
+                        element.getDate().getYear() == date.getYear()) {
+                    result = Optional.of(element);
+                    break;
                 }
             }
         }
-        return rsl;
+        return result;
     }
 }

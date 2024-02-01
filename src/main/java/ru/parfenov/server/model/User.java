@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class User {
-    List<String> history = new ArrayList<>();
     private String login;
     private String password;
+    private List<String> history = new ArrayList<>();
 
     public String getLogin() {
         return login;
