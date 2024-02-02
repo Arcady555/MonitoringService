@@ -16,5 +16,15 @@
             <column name="history" type="varchar"/>
         </createTable>
 
+        <createTable tableName="user">
+            <column autoIncrement="true" name="id" type="int">
+                <constraints unique="true" nullable="false" primaryKey="true"/>
+            </column>
+            <column name="user_id" type="int"/>
+            <column name="date" type="timestamp"/>
+            <column name="point" type="varchar(50)"/>
+            <column name="value" type="int"/>
+        </createTable>
+
     </changeSet>
 </databaseChangeLog>

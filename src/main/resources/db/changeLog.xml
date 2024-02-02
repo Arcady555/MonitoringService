@@ -5,7 +5,6 @@
         xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
     http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
-    <include file="changelog/01_ddl_create_table_users.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/01_ddl_create_table_users_and_data.xml" relativeToChangelogFile="true"/>
     <include file="changelog/02_dml_insert_admin_into_users.xml" relativeToChangelogFile="true"/>
-    <include file="changelog/03_ddl_create_table_meters_data.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>
