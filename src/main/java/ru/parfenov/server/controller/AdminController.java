@@ -1,16 +1,16 @@
 package ru.parfenov.server.controller;
 
-import ru.parfenov.server.service.OperationService;
+import ru.parfenov.server.service.UserService;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class AdminController {
-    private final OperationService service;
+    private final UserService userService;
 
-    public AdminController(OperationService service) {
-        this.service = service;
+    public AdminController(UserService userService) {
+        this.userService = userService;
     }
 
     public void toOperate() throws IOException {
@@ -28,11 +28,11 @@ public class AdminController {
                     """);
             String answer = r.readLine();
             switch (answer) {
-                case "0" -> service.viewAllUsers();
-                case "1" -> service.viewLastDataOfUser();
-                case "2" -> service.viewDataForSpecMonthOfUser();
-                case "3" -> service.viewDataHistoryOfUser();
-                case "4" -> service.viewUserHistory();
+                case "0" -> userService.viewAllUsers();
+                case "1" -> userService.viewLastDataOfUser();
+                case "2" -> userService.viewDataForSpecMonthOfUser();
+                case "3" -> userService.viewDataHistoryOfUser();
+                case "4" -> userService.viewUserHistory();
                 case "5" -> {
                     return;
                 }

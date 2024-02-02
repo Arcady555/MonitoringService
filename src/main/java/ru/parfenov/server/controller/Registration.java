@@ -1,13 +1,13 @@
 package ru.parfenov.server.controller;
 
-import ru.parfenov.server.service.OperationService;
+import ru.parfenov.server.service.UserService;
 
 import java.io.IOException;
 
 public class Registration {
-    private final OperationService service;
+    private final UserService service;
 
-    public Registration(OperationService service) {
+    public Registration(UserService service) {
         this.service = service;
     }
 

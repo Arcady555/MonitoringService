@@ -1,12 +1,9 @@
 package ru.parfenov.server.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class User {
     private String login;
     private String password;
-    private List<String> history = new ArrayList<>();
+    private String history;
 
     public String getLogin() {
         return login;
@@ -24,11 +21,11 @@ public class User {
         this.password = password;
     }
 
-    public List<String> getHistory() {
+    public String getHistory() {
         return history;
     }
 
-    public void setHistory(List<String> history) {
+    public void setHistory(String history) {
         this.history = history;
     }
 }

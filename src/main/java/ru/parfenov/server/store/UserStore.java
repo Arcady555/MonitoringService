@@ -1,37 +1,14 @@
 package ru.parfenov.server.store;
 
 import ru.parfenov.server.model.User;
-import ru.parfenov.server.utility.Utility;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class UserStore {
+public interface UserStore {
+    Set<Map.Entry<String, User>> getAll();
 
-    private final Map<String, User> userMap = new HashMap<>();
+    User getByLogin(String name);
 
-    /**
-     * при создании хранилища пользователей автоматически добавляется
-     * пользователь с логином admin и паролем 123(Если не менялось значение статической переменной)
-     */
-    public UserStore() {
-        create("admin", Utility.ADMIN_PASSWORD);
-    }
-
-    public Set<Map.Entry<String, User>> getAll() {
-        return userMap.entrySet();
-    }
-
-    public User getByLogin(String name) {
-        return userMap.get(name);
-    }
-
-    public User create(String login, String password) {
-        User user = new User();
-        user.setLogin(login);
-        user.setPassword(password);
-        userMap.put(login, user);
-        return user;
-    }
+    User create(String login, String password);
 }

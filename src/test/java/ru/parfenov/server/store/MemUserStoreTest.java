@@ -8,8 +8,8 @@ import ru.parfenov.server.model.User;
 import java.util.HashMap;
 import java.util.Map;
 
-class UserStoreTest {
-    static UserStore userStore = new UserStore();
+class MemUserStoreTest {
+    static MemUserStore memUserStore = new MemUserStore();
     static Map<String, User> userMap = new HashMap<>();
     static User user0;
     static User user1;
@@ -17,7 +17,7 @@ class UserStoreTest {
 
     @BeforeAll
     static void setUp() {
-        userStore = new UserStore();
+        memUserStore = new MemUserStore();
         userMap = new HashMap<>();
 
         user0 = new User();
@@ -35,25 +35,23 @@ class UserStoreTest {
         user2.setPassword("123");
         userMap.put("NotArcady", user2);
 
-        userStore.create("Arcady", "123");
-        userStore.create("NotArcady", "123");
+        memUserStore.create("Arcady", "123");
+        memUserStore.create("NotArcady", "123");
     }
 
     @Test
     void create() {
-        Assertions.assertEquals(userStore.create("Arcady", "123").getLogin(), user1.getLogin());
-        Assertions.assertEquals(userStore.create("Arcady", "123").getPassword(), user1.getPassword());
-        Assertions.assertEquals(userStore.create("Arcady", "123")
-                .getHistory().size(), user1.getHistory().size());
+        Assertions.assertEquals(memUserStore.create("Arcady", "123").getLogin(), user1.getLogin());
+        Assertions.assertEquals(memUserStore.create("Arcady", "123").getPassword(), user1.getPassword());
     }
 
     @Test
     void getAll() {
-        Assertions.assertEquals(userStore.getAll().toArray().length, userMap.entrySet().toArray().length);
+        Assertions.assertEquals(memUserStore.getAll().toArray().length, userMap.entrySet().toArray().length);
     }
 
     @Test
     void getByLogin() {
-        Assertions.assertEquals(userStore.getByLogin("Arcady").getPassword(), "123");
+        Assertions.assertEquals(memUserStore.getByLogin("Arcady").getPassword(), "123");
     }
 }

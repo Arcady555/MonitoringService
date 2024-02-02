@@ -8,8 +8,8 @@ import ru.parfenov.server.model.User;
 
 import java.util.List;
 
-class MetersDataStoreTest {
-    static MetersDataStore store;
+class MemMetersDataStoreTest {
+    static MemMetersDataStore store;
     static MetersData data1;
     static MetersData data2;
     static User user1;
@@ -17,7 +17,7 @@ class MetersDataStoreTest {
 
     @BeforeAll
     static void setUp() {
-        store = new MetersDataStore();
+        store = new MemMetersDataStore();
 
         data1 = new MetersData();
         user1 = new User();

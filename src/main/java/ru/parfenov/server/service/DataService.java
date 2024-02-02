@@ -1,13 +1,13 @@
 package ru.parfenov.server.service;
 
 import ru.parfenov.server.model.MetersData;
-import ru.parfenov.server.model.User;
-import ru.parfenov.server.store.MetersDataStore;
-import ru.parfenov.server.store.UserStore;
+import ru.parfenov.server.store.MemMetersDataStore;
+import ru.parfenov.server.store.MemUserStore;
 import ru.parfenov.server.utility.Utility;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.temporal.ChronoUnit;
@@ -16,70 +16,45 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static ru.parfenov.server.utility.Utility.fixTime;
+
 /**
  * Данный класс служит для выделения методов для пользователя(не админа)
  */
 
-public class ClientService {
-    private final UserStore userStore;
-    private final MetersDataStore dataStore;
-    private final BufferedReader reader;
+public class DataService {
+    private final MemUserStore memUserStore;
+    private final MemMetersDataStore dataStore;
     StringBuilder detailsOfVisit = new StringBuilder();
 
-    public ClientService(UserStore userStore, MetersDataStore dataStore, BufferedReader reader) {
-        this.userStore = userStore;
+    BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+    public DataService(MemUserStore memUserStore, MemMetersDataStore dataStore) {
+        this.memUserStore = memUserStore;
         this.dataStore = dataStore;
-        this.reader = reader;
     }
 
-    public void reg() throws IOException {
-        String nameOfMethod = "registration";
-        System.out.println("Create name");
-        String login = reader.readLine();
-        if (userStore.getByLogin(login) != null) {
-            System.out.println("User is already exist!\n");
-        } else {
-            System.out.println("Create password");
-            String password = reader.readLine();
-            User user = userStore.create(login, password);
-            dataStore.createDataList(user);
-        }
-        System.out.println("OK!" + System.lineSeparator());
-        fixTime(nameOfMethod, detailsOfVisit);
-        List<String> history = userStore.getByLogin(login).getHistory();
-        history.add(detailsOfVisit.toString());
+    public MemMetersDataStore getDataStore() {
+        return dataStore;
     }
 
-    public String enter() throws IOException {
-        String nameOfMethod = "enter";
-        System.out.println("Введите имя (или exit)");
-        String login = reader.readLine();
-        if (login.equals(Utility.EXIT_WORD)) {
-            return login;
-        } else if (userStore.getByLogin(login) == null) {
-            System.out.println("Unknown user!\n");
-            return Utility.EXIT_WORD;
-        } else {
-            System.out.println("Введите пароль");
-            String password = reader.readLine();
-            if (password.equals(userStore.getByLogin(login).getPassword())) {
-                fixTime(nameOfMethod, detailsOfVisit);
-            } else {
-                System.out.println("Not correct password!\n");
-                return Utility.EXIT_WORD;
-            }
-            return login;
-        }
-    }
-
+    /**
+     * Отсылка данных
+     * Разрешена только в текущем месяце, один раз. Без редактирования.
+     * Проверку выполняет метод clientService.validationOnceInMonth()
+     * Допускается кроме 3х стандартных значений, ввести ещё свои какие-то показатели и заполнить их.
+     *
+     * @param login
+     * @throws IOException
+     */
     public void submitData(String login) throws IOException {
         try {
             String nameOfMethod = "submit data";
             if (validationOnceInMonth(login)) {
                 System.out.println("""
-                    1 - Would you like to enter 3 points(heating, cool water, hot water) ?
-                    2 - Would you like to enter more points ?
-                    """);
+                        1 - Would you like to enter 3 points(heating, cool water, hot water) ?
+                        2 - Would you like to enter more points ?
+                        """);
                 String answer = reader.readLine();
                 MetersData metersData = new MetersData();
                 Map<String, Integer> data = metersData.getDataPoints();
@@ -100,9 +75,9 @@ public class ClientService {
                     submitData(login);
                 }
                 metersData.setDate(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES));
-                dataStore.createData(userStore.getByLogin(login), metersData);
+                dataStore.createData(memUserStore.getByLogin(login), metersData);
                 System.out.println("OK!" + System.lineSeparator());
-                fixTime(nameOfMethod, detailsOfVisit);
+                detailsOfVisit.append(fixTime(nameOfMethod));
             } else {
                 System.out.println("This month data is already exist!!!" + System.lineSeparator());
             }
@@ -112,21 +87,32 @@ public class ClientService {
         }
     }
 
+    /**
+     * Просмотр последних заполненных данных
+     *
+     * @param login
+     */
     public void viewLastData(String login) {
         String nameOfMethod = "view last data";
-        Optional<MetersData> data = dataStore.getLastData(userStore.getByLogin(login));
+        Optional<MetersData> data = dataStore.getLastData(memUserStore.getByLogin(login));
         if (data.isEmpty()) {
             System.out.println("No data!!!" + System.lineSeparator());
         } else {
             printDataFromDataStore(data.get());
         }
-        fixTime(nameOfMethod, detailsOfVisit);
+        detailsOfVisit.append(fixTime(nameOfMethod));
     }
 
+    /**
+     * Просмотр данных за выбранный месяц
+     *
+     * @param login
+     * @throws IOException
+     */
     public void viewDataForSpecMonth(String login) throws IOException {
         String nameOfMethod = "view data for spec month";
         System.out.println("Which year are You interesting?");
-        System.out.println("Please enter the number " + Utility.FIRST_YEAR +"-" + LocalDateTime.now().getYear());
+        System.out.println("Please enter the number " + Utility.FIRST_YEAR + "-" + LocalDateTime.now().getYear());
         int year = Integer.parseInt(reader.readLine());
         if (year > LocalDateTime.now().getYear() || year < Utility.FIRST_YEAR) {
             System.out.println("Please enter correct" + System.lineSeparator());
@@ -149,7 +135,7 @@ public class ClientService {
                         dateString = year + "-" + month + "-01T01:01:01";
                     }
                     LocalDateTime date = LocalDateTime.parse(dateString);
-                    Optional<MetersData> data = dataStore.getDataForSpecMonth(userStore.getByLogin(login), date);
+                    Optional<MetersData> data = dataStore.getDataForSpecMonth(memUserStore.getByLogin(login), date);
                     if (data.isEmpty()) {
                         System.out.println("No data!!!" + System.lineSeparator());
                     } else {
@@ -163,13 +149,18 @@ public class ClientService {
             }
 
         }
-        fixTime(nameOfMethod, detailsOfVisit);
+        detailsOfVisit.append(fixTime(nameOfMethod));
     }
 
+    /**
+     * Просмотр всех своих заполненных данных
+     *
+     * @param login
+     */
     public void viewDataHistory(String login) {
         String nameOfMethod = "view data history";
-        Optional<List<MetersData>> dataListOptional = dataStore.findByUser(userStore.getByLogin(login));
-        if (dataListOptional.isPresent()) {
+        Optional<List<MetersData>> dataListOptional = dataStore.findByUser(memUserStore.getByLogin(login));
+        if (dataListOptional.isPresent() && dataListOptional.get().size() != 0) {
             List<MetersData> dataList = dataListOptional.get();
             for (MetersData metersData : dataList) {
                 printDataFromDataStore(metersData);
@@ -177,14 +168,15 @@ public class ClientService {
         } else {
             System.out.println("No data!!!" + System.lineSeparator());
         }
-        fixTime(nameOfMethod, detailsOfVisit);
+        String newHistory = memUserStore.getByLogin(login).getHistory() + fixTime(nameOfMethod);
+        memUserStore.getByLogin(login).setHistory(newHistory);
     }
 
     public void toOut(String login) {
         String nameOfMethod = "out";
-        fixTime(nameOfMethod, detailsOfVisit);
-        List<String> history = userStore.getByLogin(login).getHistory();
-        history.add(detailsOfVisit.toString());
+        detailsOfVisit.append(fixTime(nameOfMethod));
+        String newHistory = memUserStore.getByLogin(login).getHistory() + detailsOfVisit;
+        memUserStore.getByLogin(login).setHistory(newHistory);
     }
 
     /**
@@ -192,12 +184,13 @@ public class ClientService {
      * который может выполняться только один раз и в текущем месяце.
      * Если в текущем месяце уже есть данные(актуальные, последние данные)
      * - значит ждите следующего месяца))
+     *
      * @param login
      * @return
      */
     private boolean validationOnceInMonth(String login) {
         boolean rsl;
-        Optional<MetersData> data = dataStore.getLastData(userStore.getByLogin(login));
+        Optional<MetersData> data = dataStore.getLastData(memUserStore.getByLogin(login));
         if (data.isEmpty()) {
             rsl = true;
         } else {
@@ -212,6 +205,7 @@ public class ClientService {
 
     /**
      * Помогает сформировать данные для отправки в хранилище
+     *
      * @param pointNumber
      * @param data
      * @param r
@@ -238,6 +232,7 @@ public class ClientService {
 
     /**
      * Распечатка данных, полученных из хранилища
+     *
      * @param data
      */
     private void printDataFromDataStore(MetersData data) {
@@ -245,12 +240,5 @@ public class ClientService {
         for (Map.Entry<String, Integer> point : data.getDataPoints().entrySet()) {
             System.out.println(point.getKey() + ": " + point.getValue());
         }
-    }
-
-    private void fixTime(String nameOfMethod, StringBuilder stringBuilder) {
-        stringBuilder.append(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
-                .append(" ")
-                .append(nameOfMethod)
-                .append(System.lineSeparator());
     }
 }
