@@ -24,7 +24,8 @@ public class Authentication {
         if (login.equals("admin")) {
             AdminController controller = new AdminController(userService);
             controller.toOperate();
-        } else if (login.equals(Utility.EXIT_WORD)) {
+        } else if (login.equals(Utility.exitWord)) {
+            System.out.println("Exit!");
         } else {
             ClientController controller = new ClientController(dataService);
             controller.toOperate(login);

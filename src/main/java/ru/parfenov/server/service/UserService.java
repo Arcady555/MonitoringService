@@ -61,11 +61,11 @@ public class UserService {
         String nameOfMethod = "enter";
         System.out.println("Введите имя (или exit)");
         String login = reader.readLine();
-        if (login.equals(Utility.EXIT_WORD)) {
+        if (login.equals(Utility.exitWord)) {
             return login;
         } else if (memUserStore.getByLogin(login) == null) {
             System.out.println("Unknown user!\n");
-            return Utility.EXIT_WORD;
+            return Utility.exitWord;
         } else {
             System.out.println("Введите пароль");
             String password = reader.readLine();
@@ -74,7 +74,7 @@ public class UserService {
                 memUserStore.getByLogin(login).setHistory(newHistory);
             } else {
                 System.out.println("Not correct password!\n");
-                return Utility.EXIT_WORD;
+                return Utility.exitWord;
             }
             return login;
         }

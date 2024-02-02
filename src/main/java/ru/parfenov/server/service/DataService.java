@@ -64,8 +64,8 @@ public class DataService {
                     System.out.println("how many points will you create more?");
 
                     int answer2 = Integer.parseInt(reader.readLine());
-                    if (answer2 > Utility.MAX_NUMBER_OF_POINTS) {
-                        System.out.println("It is too much!!! (Must be not over " + Utility.MAX_NUMBER_OF_POINTS + ")");
+                    if (answer2 > Utility.maxNumberOfPoints) {
+                        System.out.println("It is too much!!! (Must be not over " + Utility.maxNumberOfPoints + ")");
                         submitData(login);
                     } else {
                         printDataForSubmit(3 + answer2, data, reader);
@@ -112,9 +112,9 @@ public class DataService {
     public void viewDataForSpecMonth(String login) throws IOException {
         String nameOfMethod = "view data for spec month";
         System.out.println("Which year are You interesting?");
-        System.out.println("Please enter the number " + Utility.FIRST_YEAR + "-" + LocalDateTime.now().getYear());
+        System.out.println("Please enter the number " + Utility.firstYear + "-" + LocalDateTime.now().getYear());
         int year = Integer.parseInt(reader.readLine());
-        if (year > LocalDateTime.now().getYear() || year < Utility.FIRST_YEAR) {
+        if (year > LocalDateTime.now().getYear() || year < Utility.firstYear) {
             System.out.println("Please enter correct" + System.lineSeparator());
             viewDataForSpecMonth(login);
         } else {

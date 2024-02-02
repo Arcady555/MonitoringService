@@ -7,10 +7,10 @@ import java.time.temporal.ChronoUnit;
 import java.util.Map;
 
 public class Utility {
-    public static String ADMIN_PASSWORD = "123";
-    public static int MAX_NUMBER_OF_POINTS = 10;
-    public static String EXIT_WORD = "exit";
-    public static int FIRST_YEAR = 2015;
+    public static String adminPassword = "123";
+    public static int maxNumberOfPoints = 10;
+    public static String exitWord = "exit";
+    public static int firstYear = 2015;
 
     public static String fixTime(String nameOfMethod) {
         return (LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES)

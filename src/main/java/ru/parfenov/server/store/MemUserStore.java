@@ -16,7 +16,7 @@ public class MemUserStore {
      * пользователь с логином admin и паролем 123(Если не менялось значение статической переменной)
      */
     public MemUserStore() {
-        create("admin", Utility.ADMIN_PASSWORD);
+        create("admin", Utility.adminPassword);
     }
 
     public Set<Map.Entry<String, User>> getAll() {

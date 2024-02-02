@@ -23,7 +23,8 @@ public class MemMetersDataStore {
 
     public Optional<MetersData> getLastData(User user) {
         List<MetersData> list = findByUser(user).isPresent() ? findByUser(user).get() : null;
-        return list != null && list.size() != 0 ? Optional.of(list.get(list.size() - 1)) : Optional.empty();
+        return list != null
+                && list.size() != 0 ? Optional.of(list.get(list.size() - 1)) : Optional.empty();
     }
 
     public Optional<MetersData> getDataForSpecMonth(User user, LocalDateTime date) {
@@ -31,8 +32,8 @@ public class MemMetersDataStore {
         List<MetersData> list = findByUser(user).isPresent() ? findByUser(user).get() : null;
         if (list != null && list.size() != 0) {
             for (MetersData element : list) {
-                if (element.getDate().getMonth().equals(date.getMonth()) &&
-                        element.getDate().getYear() == date.getYear()) {
+                if (element.getDate().getMonth().equals(date.getMonth())
+                        && element.getDate().getYear() == date.getYear()) {
                     result = Optional.of(element);
                     break;
                 }
