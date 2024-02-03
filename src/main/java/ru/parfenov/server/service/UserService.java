@@ -1,7 +1,7 @@
 package ru.parfenov.server.service;
 
 import ru.parfenov.server.model.User;
-import ru.parfenov.server.store.MemUserStore;
+import ru.parfenov.server.store.UserStore;
 import ru.parfenov.server.utility.Utility;
 
 import java.io.BufferedReader;
@@ -12,11 +12,11 @@ import java.util.Map;
 import static ru.parfenov.server.utility.Utility.fixTime;
 
 public class UserService {
-    private final MemUserStore memUserStore;
+    private final UserStore memUserStore;
     private final DataService dataService;
     private final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-    public UserService(MemUserStore memUserStore, DataService dataService) {
+    public UserService(UserStore memUserStore, DataService dataService) {
         this.memUserStore = memUserStore;
         this.dataService = dataService;
     }

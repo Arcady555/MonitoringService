@@ -3,6 +3,8 @@ package ru.parfenov.server.service;
 import ru.parfenov.server.model.MetersData;
 import ru.parfenov.server.store.MemMetersDataStore;
 import ru.parfenov.server.store.MemUserStore;
+import ru.parfenov.server.store.MetersDataStore;
+import ru.parfenov.server.store.UserStore;
 import ru.parfenov.server.utility.Utility;
 
 import java.io.BufferedReader;
@@ -23,18 +25,18 @@ import static ru.parfenov.server.utility.Utility.fixTime;
  */
 
 public class DataService {
-    private final MemUserStore memUserStore;
-    private final MemMetersDataStore dataStore;
+    private final UserStore memUserStore;
+    private final MetersDataStore dataStore;
     StringBuilder detailsOfVisit = new StringBuilder();
 
     BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-    public DataService(MemUserStore memUserStore, MemMetersDataStore dataStore) {
+    public DataService(UserStore memUserStore, MetersDataStore dataStore) {
         this.memUserStore = memUserStore;
         this.dataStore = dataStore;
     }
 
-    public MemMetersDataStore getDataStore() {
+    public MetersDataStore getDataStore() {
         return dataStore;
     }
 

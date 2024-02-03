@@ -6,7 +6,7 @@ import ru.parfenov.server.model.User;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class MemMetersDataStore {
+public class MemMetersDataStore implements MetersDataStore {
     Map<User, List<MetersData>> store = new HashMap<>();
 
     public void createDataList(User user) {

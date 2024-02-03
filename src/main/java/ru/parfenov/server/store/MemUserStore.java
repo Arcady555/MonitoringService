@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class MemUserStore {
+public class MemUserStore implements UserStore {
 
     private final Map<String, User> userMap = new HashMap<>();
 
