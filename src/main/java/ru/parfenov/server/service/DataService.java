@@ -1,9 +1,8 @@
 package ru.parfenov.server.service;
 
-import ru.parfenov.server.model.MetersData;
-import ru.parfenov.server.store.MemMetersDataStore;
-import ru.parfenov.server.store.MemUserStore;
-import ru.parfenov.server.store.MetersDataStore;
+import ru.parfenov.server.model.PointValue;
+import ru.parfenov.server.model.User;
+import ru.parfenov.server.store.DataStore;
 import ru.parfenov.server.store.UserStore;
 import ru.parfenov.server.utility.Utility;
 
@@ -15,30 +14,29 @@ import java.time.Month;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import static ru.parfenov.server.utility.Utility.fixTime;
 
 /**
- * Данный класс служит для выделения методов для пользователя(не админа)
+ * Данный класс служит для работы с данными пользователем(не админом)
  */
 
 public class DataService {
-    private final UserStore memUserStore;
-    private final MetersDataStore dataStore;
-    StringBuilder detailsOfVisit = new StringBuilder();
+    private final UserStore userStore;
+    private final DataStore dataStore;
 
     BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-    public DataService(UserStore memUserStore, MetersDataStore dataStore) {
-        this.memUserStore = memUserStore;
+    public DataService(UserStore userStore, DataStore dataStore) {
+        this.userStore = userStore;
         this.dataStore = dataStore;
     }
 
-    public MetersDataStore getDataStore() {
-        return dataStore;
-    }
+    /**
+     * Данные 5 методов ниже имеют фиксацию времени
+     * Используются только клиентом(не админом)
+     */
 
     /**
      * Отсылка данных
@@ -51,6 +49,7 @@ public class DataService {
      */
     public void submitData(String login) throws IOException {
         try {
+            User user = userStore.getByLogin(login);
             String nameOfMethod = "submit data";
             if (validationOnceInMonth(login)) {
                 System.out.println("""
@@ -58,10 +57,9 @@ public class DataService {
                         2 - Would you like to enter more points ?
                         """);
                 String answer = reader.readLine();
-                MetersData metersData = new MetersData();
-                Map<String, Integer> data = metersData.getDataPoints();
+                List<PointValue> list = new ArrayList<>();
                 if (answer.equals("1")) {
-                    printDataForSubmit(3, data, reader);
+                    printDataForSubmit(3, list, reader);
                 } else if (answer.equals("2")) {
                     System.out.println("how many points will you create more?");
 
@@ -70,16 +68,19 @@ public class DataService {
                         System.out.println("It is too much!!! (Must be not over " + Utility.maxNumberOfPoints + ")");
                         submitData(login);
                     } else {
-                        printDataForSubmit(3 + answer2, data, reader);
+                        printDataForSubmit(3 + answer2, list, reader);
                     }
                 } else {
                     System.out.println("Please enter correct" + System.lineSeparator());
                     submitData(login);
                 }
-                metersData.setDate(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES));
-                dataStore.createData(memUserStore.getByLogin(login), metersData);
+                for (PointValue pointValue : list) {
+                    pointValue.setUserId(user.getId());
+                    pointValue.setDate(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES));
+                    dataStore.create(pointValue);
+                }
                 System.out.println("OK!" + System.lineSeparator());
-                detailsOfVisit.append(fixTime(nameOfMethod));
+                fixTime(userStore, login, nameOfMethod);
             } else {
                 System.out.println("This month data is already exist!!!" + System.lineSeparator());
             }
@@ -96,13 +97,13 @@ public class DataService {
      */
     public void viewLastData(String login) {
         String nameOfMethod = "view last data";
-        Optional<MetersData> data = dataStore.getLastData(memUserStore.getByLogin(login));
+        Optional<List<PointValue>> data = dataStore.getLastData(userStore.getByLogin(login).getId());
         if (data.isEmpty()) {
             System.out.println("No data!!!" + System.lineSeparator());
         } else {
             printDataFromDataStore(data.get());
         }
-        detailsOfVisit.append(fixTime(nameOfMethod));
+        fixTime(userStore, login, nameOfMethod);
     }
 
     /**
@@ -137,7 +138,7 @@ public class DataService {
                         dateString = year + "-" + month + "-01T01:01:01";
                     }
                     LocalDateTime date = LocalDateTime.parse(dateString);
-                    Optional<MetersData> data = dataStore.getDataForSpecMonth(memUserStore.getByLogin(login), date);
+                    Optional<List<PointValue>> data = dataStore.getDataForSpecMonth(userStore.getByLogin(login), date);
                     if (data.isEmpty()) {
                         System.out.println("No data!!!" + System.lineSeparator());
                     } else {
@@ -151,7 +152,7 @@ public class DataService {
             }
 
         }
-        detailsOfVisit.append(fixTime(nameOfMethod));
+        fixTime(userStore, login, nameOfMethod);
     }
 
     /**
@@ -161,24 +162,19 @@ public class DataService {
      */
     public void viewDataHistory(String login) {
         String nameOfMethod = "view data history";
-        Optional<List<MetersData>> dataListOptional = dataStore.findByUser(memUserStore.getByLogin(login));
-        if (dataListOptional.isPresent() && dataListOptional.get().size() != 0) {
-            List<MetersData> dataList = dataListOptional.get();
-            for (MetersData metersData : dataList) {
-                printDataFromDataStore(metersData);
-            }
+        Optional<List<PointValue>> dataListOptional = dataStore.findByUser(userStore.getByLogin(login));
+        if (dataListOptional.isPresent()) {
+            List<PointValue> dataList = dataListOptional.get();
+            printDataFromDataStore(dataList);
         } else {
             System.out.println("No data!!!" + System.lineSeparator());
         }
-        String newHistory = memUserStore.getByLogin(login).getHistory() + fixTime(nameOfMethod);
-        memUserStore.getByLogin(login).setHistory(newHistory);
+        fixTime(userStore, login, nameOfMethod);
     }
 
     public void toOut(String login) {
         String nameOfMethod = "out";
-        detailsOfVisit.append(fixTime(nameOfMethod));
-        String newHistory = memUserStore.getByLogin(login).getHistory() + detailsOfVisit;
-        memUserStore.getByLogin(login).setHistory(newHistory);
+        fixTime(userStore, login, nameOfMethod);
     }
 
     /**
@@ -192,14 +188,14 @@ public class DataService {
      */
     private boolean validationOnceInMonth(String login) {
         boolean rsl;
-        Optional<MetersData> data = dataStore.getLastData(memUserStore.getByLogin(login));
+        Optional<List<PointValue>> data = dataStore.getLastData(userStore.getByLogin(login).getId());
         if (data.isEmpty()) {
             rsl = true;
         } else {
             Month curMonth = LocalDateTime.now().getMonth();
-            Month lastMonth = data.get().getDate().getMonth();
+            Month lastMonth = data.get().get(0).getDate().getMonth();
             int curYear = LocalDateTime.now().getYear();
-            int lastYear = data.get().getDate().getYear();
+            int lastYear = data.get().get(0).getDate().getYear();
             rsl = !(curMonth.equals(lastMonth) && curYear == lastYear);
         }
         return rsl;
@@ -209,11 +205,11 @@ public class DataService {
      * Помогает сформировать данные для отправки в хранилище
      *
      * @param pointNumber
-     * @param data
-     * @param r
+     * @param list
+     * @param reader
      * @throws IOException
      */
-    private void printDataForSubmit(int pointNumber, Map<String, Integer> data, BufferedReader r) throws IOException {
+    private void printDataForSubmit(int pointNumber, List<PointValue> list, BufferedReader reader) throws IOException {
         List<String> pointList = new ArrayList<>();
         pointList.add("heating");
         pointList.add("cool water");
@@ -221,14 +217,14 @@ public class DataService {
         if (pointNumber > 3) {
             for (int i = 4; i < pointNumber + 1; i++) {
                 System.out.println("Enter name of " + i + "  point");
-                String answer = r.readLine();
+                String answer = reader.readLine();
                 pointList.add(answer);
             }
         }
         for (String s : pointList) {
             System.out.println("Enter " + s + " value");
-            int value = Integer.parseInt(r.readLine());
-            data.put(s, value);
+            int value = Integer.parseInt(reader.readLine());
+            list.add(new PointValue(s, value));
         }
     }
 
@@ -237,10 +233,29 @@ public class DataService {
      *
      * @param data
      */
-    private void printDataFromDataStore(MetersData data) {
-        System.out.println(data.getDate());
-        for (Map.Entry<String, Integer> point : data.getDataPoints().entrySet()) {
-            System.out.println(point.getKey() + ": " + point.getValue());
+    private void printDataFromDataStore(List<PointValue> data) {
+        PointValue firstPoint = data.get(0);
+        System.out.println(
+                userStore.findById(firstPoint.getUserId()).getLogin()
+                        + System.lineSeparator()
+                        + firstPoint.getDate()
+                        + System.lineSeparator()
+                        + firstPoint.getPoint()
+                        + " "
+                        + firstPoint.getValue()
+        );
+        for (int i = 1; i < data.size(); i++) {
+            if (data.get(i).getDate().equals(data.get(i - 1).getDate())) {
+                System.out.println(data.get(i).getPoint() + " " + data.get(i).getValue());
+            } else {
+                System.out.println(
+                        data.get(i).getDate()
+                                + System.lineSeparator()
+                                + data.get(i).getPoint()
+                                + " "
+                                + data.get(i).getValue()
+                );
+            }
         }
     }
 }

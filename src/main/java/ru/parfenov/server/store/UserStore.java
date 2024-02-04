@@ -2,13 +2,16 @@ package ru.parfenov.server.store;
 
 import ru.parfenov.server.model.User;
 
-import java.util.Map;
-import java.util.Set;
+import java.util.List;
 
 public interface UserStore {
-    Set<Map.Entry<String, User>> getAll();
+    List<User> getAll();
+
+    User findById(int userId);
 
     User getByLogin(String name);
 
-    User create(String login, String password);
+    void create(User user);
+
+    void insertUserHistory(User user, String newHistory);
 }

@@ -18,6 +18,9 @@ public class ClientInterface {
     ServerClass server = new ServerClass();
     BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
 
+    public ClientInterface() throws Exception {
+    }
+
     public void run() throws IOException {
         System.out.println("""
                 Please enter:

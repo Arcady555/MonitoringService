@@ -7,19 +7,34 @@
     <property name="now" value="now()" dbms="postgresql"/>
     <changeSet id="01" author="Arcady555">
 
-        <createTable tableName="users">
-            <column autoIncrement="true" name="id" type="int">
-                <constraints unique="true" nullable="false" primaryKey="true"/>
-            </column>
+        <createSequence catalogName="ms"
+                        cycle="true"
+                        incrementBy="1"
+                        maxValue="1000000"
+                        minValue="2"
+                        schemaName="public"
+                        sequenceName="user_seq"
+                        startValue="2"/>
+
+        <createSequence catalogName="ms"
+                        cycle="true"
+                        incrementBy="1"
+                        maxValue="10000000"
+                        minValue="1"
+                        schemaName="public"
+                        sequenceName="data_seq"
+                        startValue="1"/>
+
+
+        <createTable tableName="users" schemaName="public">
+            <column name="id" type="int" defaultValueComputed="nextval('user_seq')"/>
             <column name="login" type="varchar(50)"/>
-            <column name="password" type="numeric"/>
+            <column name="password" type="varchar(100)"/>
             <column name="history" type="varchar"/>
         </createTable>
 
-        <createTable tableName="user">
-            <column autoIncrement="true" name="id" type="int">
-                <constraints unique="true" nullable="false" primaryKey="true"/>
-            </column>
+        <createTable tableName="point_value" schemaName="public">
+            <column name="id" type="bigint" defaultValueComputed="nextval('data_seq')"/>
             <column name="user_id" type="int"/>
             <column name="date" type="timestamp"/>
             <column name="point" type="varchar(50)"/>
