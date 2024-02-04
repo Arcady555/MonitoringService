@@ -19,7 +19,7 @@ import java.util.Optional;
 import static ru.parfenov.server.utility.Utility.fixTime;
 
 /**
- * Данный класс служит для работы с данными пользователем(не админом)
+ * Данный класс служит для работы пользователя(не админа) со своими данными
  */
 
 public class DataService {
@@ -41,7 +41,7 @@ public class DataService {
     /**
      * Отсылка данных
      * Разрешена только в текущем месяце, один раз. Без редактирования.
-     * Проверку выполняет метод clientService.validationOnceInMonth()
+     * Проверку выполняет метод validationOnceInMonth()
      * Допускается кроме 3х стандартных значений, ввести ещё свои какие-то показатели и заполнить их.
      *
      * @param login
@@ -59,7 +59,7 @@ public class DataService {
                 String answer = reader.readLine();
                 List<PointValue> list = new ArrayList<>();
                 if (answer.equals("1")) {
-                    printDataForSubmit(3, list, reader);
+                    printDataForSubmit(3, list);
                 } else if (answer.equals("2")) {
                     System.out.println("how many points will you create more?");
 
@@ -68,7 +68,7 @@ public class DataService {
                         System.out.println("It is too much!!! (Must be not over " + Utility.maxNumberOfPoints + ")");
                         submitData(login);
                     } else {
-                        printDataForSubmit(3 + answer2, list, reader);
+                        printDataForSubmit(3 + answer2, list);
                     }
                 } else {
                     System.out.println("Please enter correct" + System.lineSeparator());
@@ -206,10 +206,9 @@ public class DataService {
      *
      * @param pointNumber
      * @param list
-     * @param reader
      * @throws IOException
      */
-    private void printDataForSubmit(int pointNumber, List<PointValue> list, BufferedReader reader) throws IOException {
+    private void printDataForSubmit(int pointNumber, List<PointValue> list) throws IOException {
         List<String> pointList = new ArrayList<>();
         pointList.add("heating");
         pointList.add("cool water");
