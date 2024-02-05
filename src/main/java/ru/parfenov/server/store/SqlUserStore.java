@@ -2,27 +2,24 @@ package ru.parfenov.server.store;
 
 import ru.parfenov.server.model.User;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ru.parfenov.server.utility.Utility.loadConnection;
+
 public class SqlUserStore implements UserStore {
-    private Connection connection;
+    private final Connection connection;
 
     public SqlUserStore() throws Exception {
-        initConnection();
+        this.connection = loadConnection();
     }
 
     public SqlUserStore(Connection connection) throws Exception {
         this.connection = connection;
-    }
-
-    public void initConnection() throws Exception {
-        Class.forName("org.postgresql.Driver");
-        String url = "jdbc:postgresql://localhost:5432/monitoring_service";
-        String login = "postgres";
-        String password = "password";
-        connection = DriverManager.getConnection(url, login, password);
     }
 
     @Override
