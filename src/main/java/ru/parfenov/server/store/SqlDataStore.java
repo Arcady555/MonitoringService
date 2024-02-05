@@ -16,6 +16,9 @@ public class SqlDataStore implements DataStore {
         initConnection();
     }
 
+    public SqlDataStore(Connection connection) throws Exception {
+        this.connection = connection;
+    }
 
     public void initConnection() throws Exception {
         Class.forName("org.postgresql.Driver");
@@ -28,7 +31,7 @@ public class SqlDataStore implements DataStore {
     @Override
     public void create(PointValue pointValue) {
         try (PreparedStatement statement = connection.prepareStatement(
-                "INSERT INTO point_value(user_id, date, point, value) VALUES (?, ?, ?, ?)")
+                "INSERT INTO point_value(user_id, date, point, \"value\") VALUES (?, ?, ?, ?)")
         ) {
             statement.setInt(1, pointValue.getUserId());
             statement.setTimestamp(2, Timestamp.valueOf(pointValue.getDate()));

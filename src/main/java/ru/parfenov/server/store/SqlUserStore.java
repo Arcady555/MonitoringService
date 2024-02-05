@@ -13,6 +13,10 @@ public class SqlUserStore implements UserStore {
         initConnection();
     }
 
+    public SqlUserStore(Connection connection) throws Exception {
+        this.connection = connection;
+    }
+
     public void initConnection() throws Exception {
         Class.forName("org.postgresql.Driver");
         String url = "jdbc:postgresql://localhost:5432/monitoring_service";
