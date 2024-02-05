@@ -4,38 +4,49 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 import ru.parfenov.server.model.PointValue;
 import ru.parfenov.server.model.User;
 
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.Properties;
 
+@Testcontainers
 class SqlDataStoreTest {
     private static Connection connection;
     private static SqlDataStore dataStore;
     private static User user;
 
+    @Container
+    public static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:13")
+            .withDatabaseName("monitoring_service")
+            .withUsername("user")
+            .withPassword("pass")
+            .withInitScript("changelog/01_ddl_create_table_users_and_data.xml")
+            .withInitScript("changelog/02_dml_insert_admin_into_users.xml");
+
+
+    @BeforeAll
+    static void beforeAll() {
+        postgreSQLContainer.start();
+    }
+
+    @AfterAll
+    static void afterAll() {
+        postgreSQLContainer.stop();
+    }
+
     @BeforeAll
     public static void initConnection() throws Exception {
-        try (InputStream in = SqlDataStore.class.getClassLoader()
-                .getResourceAsStream("db/liquibase-test.properties")) {
-            Properties config = new Properties();
-            config.load(in);
-            Class.forName(config.getProperty("driver-class-name"));
-            connection = DriverManager.getConnection(
-                    config.getProperty("url"),
-                    config.getProperty("username"),
-                    config.getProperty("password")
-
-            );
-        } catch (Exception e) {
-            throw new IllegalStateException(e);
-        }
+        connection = DriverManager.getConnection(
+                postgreSQLContainer.getJdbcUrl(),
+                postgreSQLContainer.getUsername(),
+                postgreSQLContainer.getPassword());
         dataStore = new SqlDataStore(connection);
         user = new User(1, "Arcady", "password", "history");
         PointValue pointValue = new PointValue(
