@@ -1,7 +1,7 @@
 package ru.parfenov.server.controller;
 
-import ru.parfenov.server.service.DataService;
-import ru.parfenov.server.service.UserService;
+import ru.parfenov.server.consoleview.DataConsoleView;
+import ru.parfenov.server.consoleview.UserConsoleView;
 import ru.parfenov.server.utility.Utility;
 
 import java.io.IOException;
@@ -11,23 +11,23 @@ import java.io.IOException;
  * Здесь уже есть разделение пользователей на админа и остальных
  */
 public class Authentication {
-    private final UserService userService;
-    private final DataService dataService;
+    private final UserConsoleView userConsoleView;
+    private final DataConsoleView dataConsoleView;
 
-    public Authentication(UserService userService, DataService dataService) {
-        this.userService = userService;
-        this.dataService = dataService;
+    public Authentication(UserConsoleView userConsoleView, DataConsoleView dataConsoleView) {
+        this.userConsoleView = userConsoleView;
+        this.dataConsoleView = dataConsoleView;
     }
 
     public void toAuth() throws IOException {
-        String login = userService.enter();
+        String login = userConsoleView.enter();
         if (login.equals("admin")) {
-            AdminController controller = new AdminController(userService);
+            AdminController controller = new AdminController(userConsoleView);
             controller.toOperate();
         } else if (login.equals(Utility.exitWord)) {
             System.out.println("Exit!");
         } else {
-            ClientController controller = new ClientController(dataService);
+            ClientController controller = new ClientController(dataConsoleView);
             controller.toOperate(login);
         }
     }

@@ -1,17 +1,17 @@
 package ru.parfenov.server.controller;
 
-import ru.parfenov.server.service.UserService;
+import ru.parfenov.server.consoleview.UserConsoleView;
 
 import java.io.IOException;
 
 public class Registration {
-    private final UserService service;
+    private final UserConsoleView userConsoleView;
 
-    public Registration(UserService service) {
-        this.service = service;
+    public Registration(UserConsoleView userConsoleView) {
+        this.userConsoleView = userConsoleView;
     }
 
     public void toReg() throws IOException {
-        service.reg();
+        userConsoleView.inputForReg();
     }
 }

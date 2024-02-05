@@ -1,5 +1,7 @@
 package ru.parfenov.server;
 
+import ru.parfenov.server.consoleview.DataConsoleView;
+import ru.parfenov.server.consoleview.UserConsoleView;
 import ru.parfenov.server.controller.Authentication;
 import ru.parfenov.server.controller.Registration;
 import ru.parfenov.server.service.DataService;
@@ -15,10 +17,12 @@ public class ServerClass {
     /**
      * Запуск хранилищ и сервисов
      */
-    UserStore userStore = new SqlUserStore();
-    DataStore dataStore = new SqlDataStore();
-    DataService dataService = new DataService(userStore, dataStore);
-    UserService userService = new UserService(userStore, dataService);
+    private final UserStore userStore = new SqlUserStore();
+    private final DataStore dataStore = new SqlDataStore();
+    private final DataService dataService = new DataService(userStore, dataStore);
+    private final DataConsoleView dataConsoleView = new DataConsoleView(dataService);
+    private final UserService userService = new UserService(userStore);
+    private final UserConsoleView userConsoleView = new UserConsoleView(userService, dataConsoleView);
 
     public ServerClass() throws Exception {
     }
@@ -29,7 +33,7 @@ public class ServerClass {
      * @throws IOException
      */
     public void reg() throws IOException {
-        Registration registration = new Registration(userService);
+        Registration registration = new Registration(userConsoleView);
         registration.toReg();
     }
 
@@ -40,7 +44,7 @@ public class ServerClass {
      */
 
     public void auth() throws IOException {
-        Authentication authentication = new Authentication(userService, dataService);
+        Authentication authentication = new Authentication(userConsoleView, dataConsoleView);
         authentication.toAuth();
     }
 }
