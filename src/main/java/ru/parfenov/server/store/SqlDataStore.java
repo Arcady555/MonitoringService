@@ -3,6 +3,7 @@ package ru.parfenov.server.store;
 import ru.parfenov.server.model.PointValue;
 import ru.parfenov.server.model.User;
 
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,7 +19,9 @@ public class SqlDataStore implements DataStore {
     private final Connection connection;
 
     public SqlDataStore() throws Exception {
-        this.connection = loadConnection();
+        InputStream in = SqlDataStore.class.getClassLoader()
+                .getResourceAsStream("db/liquibase.properties");
+        this.connection = loadConnection(in);
     }
 
     public SqlDataStore(Connection connection) throws Exception {
