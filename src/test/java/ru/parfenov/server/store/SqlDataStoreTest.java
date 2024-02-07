@@ -27,8 +27,8 @@ class SqlDataStoreTest {
             .withDatabaseName("monitoring_service")
             .withUsername("postgres")
             .withPassword("password")
-            .withInitScript("src/main/resources/changelog/01_ddl_create_table_users_and_data.xml")
-            .withInitScript("src/main/resources/changelog/02_dml_insert_admin_into_users.xml");
+            .withInitScript("src/main/resources/db/changelog/01_ddl_create_table_users_and_data.xml")
+            .withInitScript("src/main/resources/db/changelog/02_dml_insert_admin_into_users.xml");
 
 
     @BeforeAll
