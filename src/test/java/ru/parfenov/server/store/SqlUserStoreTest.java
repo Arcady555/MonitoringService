@@ -20,8 +20,8 @@ class SqlUserStoreTest {
             .withDatabaseName("monitoring_service")
             .withUsername("user")
             .withPassword("pass")
-            .withInitScript("changelog/01_ddl_create_table_users_and_data.xml")
-            .withInitScript("changelog/02_dml_insert_admin_into_users.xml");
+            .withInitScript("src/main/resources/changelog/01_ddl_create_table_users_and_data.xml")
+            .withInitScript("src/main/resources/changelog/02_dml_insert_admin_into_users.xml");
 
 
     @BeforeAll
