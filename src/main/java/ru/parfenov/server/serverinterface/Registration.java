@@ -1,4 +1,4 @@
-package ru.parfenov.server.controller;
+package ru.parfenov.server.serverinterface;
 
 import ru.parfenov.server.consoleview.UserConsoleView;
 

@@ -52,6 +52,7 @@
         <testcontainers.version>1.19.4</testcontainers.version>
         <testcontainers.jupiter.version>1.19.4</testcontainers.jupiter.version>
         <testcontainers.postgresql.version>1.17.6</testcontainers.postgresql.version>
+        <javax.servlet.version>4.0.1</javax.servlet.version>
 
     </properties>
 
@@ -102,6 +103,14 @@
             <artifactId>postgresql</artifactId>
             <version>${testcontainers.postgresql.version}</version>
             <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${javax.servlet.version}</version>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>

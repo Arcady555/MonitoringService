@@ -15,16 +15,16 @@ import java.util.Optional;
 
 import static ru.parfenov.server.utility.Utility.loadConnection;
 
-public class SqlDataStore implements DataStore {
+public class SqlPointValueStore implements PointValueStore {
     private final Connection connection;
 
-    public SqlDataStore() throws Exception {
-        InputStream in = SqlDataStore.class.getClassLoader()
+    public SqlPointValueStore() throws Exception {
+        InputStream in = SqlPointValueStore.class.getClassLoader()
                 .getResourceAsStream("db/liquibase.properties");
         this.connection = loadConnection(in);
     }
 
-    public SqlDataStore(Connection connection) throws Exception {
+    public SqlPointValueStore(Connection connection) throws Exception {
         this.connection = connection;
     }
 

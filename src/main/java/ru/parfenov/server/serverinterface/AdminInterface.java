@@ -1,4 +1,4 @@
-package ru.parfenov.server.controller;
+package ru.parfenov.server.serverinterface;
 
 import ru.parfenov.server.consoleview.UserConsoleView;
 
@@ -6,10 +6,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class AdminController {
+public class AdminInterface {
     private final UserConsoleView userConsoleView;
 
-    public AdminController(UserConsoleView userConsoleView) {
+    public AdminInterface(UserConsoleView userConsoleView) {
         this.userConsoleView = userConsoleView;
     }
 

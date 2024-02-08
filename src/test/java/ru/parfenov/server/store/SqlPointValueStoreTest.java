@@ -17,9 +17,9 @@ import java.time.LocalDateTime;
 import java.time.Month;
 
 @Testcontainers
-class SqlDataStoreTest {
+class SqlPointValueStoreTest {
     private static Connection connection;
-    private static SqlDataStore dataStore;
+    private static SqlPointValueStore dataStore;
     private static User user;
 
     @Container
@@ -47,7 +47,7 @@ class SqlDataStoreTest {
                 postgreSQLContainer.getJdbcUrl(),
                 postgreSQLContainer.getUsername(),
                 postgreSQLContainer.getPassword());
-        dataStore = new SqlDataStore(connection);
+        dataStore = new SqlPointValueStore(connection);
         user = new User(1, "Arcady", "password", "history");
         PointValue pointValue = new PointValue(
                 0, 1, LocalDateTime.of(2024, Month.JANUARY, 22, 10, 10),

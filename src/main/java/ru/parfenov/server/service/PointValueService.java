@@ -1,7 +1,7 @@
 package ru.parfenov.server.service;
 
 import ru.parfenov.server.model.PointValue;
-import ru.parfenov.server.store.DataStore;
+import ru.parfenov.server.store.PointValueStore;
 import ru.parfenov.server.store.UserStore;
 
 import java.time.LocalDateTime;
@@ -12,13 +12,13 @@ import java.util.Optional;
 
 import static ru.parfenov.server.utility.Utility.fixTime;
 
-public class DataService {
+public class PointValueService {
     private final UserStore userStore;
-    private final DataStore dataStore;
+    private final PointValueStore pointValueStore;
 
-    public DataService(UserStore userStore, DataStore dataStore) {
+    public PointValueService(UserStore userStore, PointValueStore pointValueStore) {
         this.userStore = userStore;
-        this.dataStore = dataStore;
+        this.pointValueStore = pointValueStore;
     }
 
     public void submitData(String login, List<PointValue> list) {
@@ -26,13 +26,13 @@ public class DataService {
         for (PointValue pointValue : list) {
             pointValue.setUserId(userId);
             pointValue.setDate(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES));
-            dataStore.create(pointValue);
+            pointValueStore.create(pointValue);
         }
         fixTime(userStore, login, "submit data");
     }
 
     public void viewLastData(String login) {
-        Optional<List<PointValue>> data = dataStore.getLastData(userStore.getByLogin(login).getId());
+        Optional<List<PointValue>> data = pointValueStore.getLastData(userStore.getByLogin(login).getId());
         if (data.isEmpty()) {
             System.out.println("No data!!!" + System.lineSeparator());
         } else {
@@ -49,7 +49,7 @@ public class DataService {
             dateString = year + "-" + month + "-01T01:01:01";
         }
         LocalDateTime date = LocalDateTime.parse(dateString);
-        Optional<List<PointValue>> data = dataStore.getDataForSpecMonth(userStore.getByLogin(login), date);
+        Optional<List<PointValue>> data = pointValueStore.getDataForSpecMonth(userStore.getByLogin(login), date);
         if (data.isEmpty()) {
             System.out.println("No data!!!" + System.lineSeparator());
         } else {
@@ -60,7 +60,7 @@ public class DataService {
     }
 
     public void viewDataHistory(String login) {
-        Optional<List<PointValue>> dataListOptional = dataStore.findByUser(userStore.getByLogin(login));
+        Optional<List<PointValue>> dataListOptional = pointValueStore.findByUser(userStore.getByLogin(login));
         if (dataListOptional.isPresent()) {
             List<PointValue> dataList = dataListOptional.get();
             printDataFromDataStore(dataList);
@@ -85,7 +85,7 @@ public class DataService {
      */
     public boolean validationOnceInMonth(String login) {
         boolean rsl;
-        Optional<List<PointValue>> data = dataStore.getLastData(userStore.getByLogin(login).getId());
+        Optional<List<PointValue>> data = pointValueStore.getLastData(userStore.getByLogin(login).getId());
         if (data.isEmpty()) {
             rsl = true;
         } else {

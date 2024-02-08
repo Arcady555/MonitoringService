@@ -9,12 +9,12 @@ import java.io.InputStreamReader;
 
 public class UserConsoleView {
     private final UserService userService;
-    private final DataConsoleView dataConsoleView;
+    private final PointValueConsoleView pointValueConsoleView;
     private final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-    public UserConsoleView(UserService userService, DataConsoleView dataConsoleView) {
+    public UserConsoleView(UserService userService, PointValueConsoleView pointValueConsoleView) {
         this.userService = userService;
-        this.dataConsoleView = dataConsoleView;
+        this.pointValueConsoleView = pointValueConsoleView;
     }
 
     /**
@@ -84,7 +84,7 @@ public class UserConsoleView {
     public void inputForViewLastDataOfUser() throws IOException {
         System.out.println("Enter login of user");
         String login = reader.readLine();
-        dataConsoleView.viewLastData(login);
+        pointValueConsoleView.viewLastData(login);
     }
 
     /**
@@ -95,7 +95,7 @@ public class UserConsoleView {
     public void inputDataForSpecMonthOfUser() throws IOException {
         System.out.println("Enter login of user");
         String login = reader.readLine();
-        dataConsoleView.inputForViewDataForSpecMonth(login);
+        pointValueConsoleView.inputForViewDataForSpecMonth(login);
     }
 
     /**
@@ -106,7 +106,7 @@ public class UserConsoleView {
     public void inputForViewDataHistoryOfUser() throws IOException {
         System.out.println("Enter login of user");
         String login = reader.readLine();
-        dataConsoleView.viewDataHistory(login);
+        pointValueConsoleView.viewDataHistory(login);
     }
 
     /**

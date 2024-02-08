@@ -1,7 +1,7 @@
 package ru.parfenov.server.consoleview;
 
 import ru.parfenov.server.model.PointValue;
-import ru.parfenov.server.service.DataService;
+import ru.parfenov.server.service.PointValueService;
 import ru.parfenov.server.utility.Utility;
 
 import java.io.BufferedReader;
@@ -14,13 +14,13 @@ import java.util.List;
 /**
  * Данный класс служит для работы пользователя(не админа) со своими данными
  */
-public class DataConsoleView {
-    private final DataService dataService;
+public class PointValueConsoleView {
+    private final PointValueService pointValueService;
 
     BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-    public DataConsoleView(DataService dataService) {
-        this.dataService = dataService;
+    public PointValueConsoleView(PointValueService pointValueService) {
+        this.pointValueService = pointValueService;
     }
 
     /**
@@ -34,7 +34,7 @@ public class DataConsoleView {
      */
     public void inputForSubmitData(String login) throws IOException {
         try {
-            if (dataService.validationOnceInMonth(login)) {
+            if (pointValueService.validationOnceInMonth(login)) {
                 System.out.println("""
                         1 - Would you like to enter 3 points(heating, cool water, hot water) ?
                         2 - Would you like to enter more points ?
@@ -57,7 +57,7 @@ public class DataConsoleView {
                     System.out.println("Please enter correct" + System.lineSeparator());
                     inputForSubmitData(login);
                 }
-                dataService.submitData(login, list);
+                pointValueService.submitData(login, list);
                 System.out.println("OK!" + System.lineSeparator());
             } else {
                 System.out.println("This month data is already exist!!!" + System.lineSeparator());
@@ -74,7 +74,7 @@ public class DataConsoleView {
      * @param login
      */
     public void viewLastData(String login) {
-        dataService.viewLastData(login);
+        pointValueService.viewLastData(login);
     }
 
     /**
@@ -101,7 +101,7 @@ public class DataConsoleView {
                     System.out.println("Please enter correct" + System.lineSeparator());
                     inputForViewDataForSpecMonth(login);
                 } else {
-                    dataService.viewDataForSpecMonth(login, month, year);
+                    pointValueService.viewDataForSpecMonth(login, month, year);
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Enter correct!!!" + System.lineSeparator());
@@ -116,11 +116,11 @@ public class DataConsoleView {
      * @param login
      */
     public void viewDataHistory(String login) {
-        dataService.viewDataHistory(login);
+        pointValueService.viewDataHistory(login);
     }
 
     public void out(String login) {
-        dataService.toOut(login);
+        pointValueService.toOut(login);
     }
 
     /**

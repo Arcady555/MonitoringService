@@ -1,6 +1,6 @@
-package ru.parfenov.server.controller;
+package ru.parfenov.server.serverinterface;
 
-import ru.parfenov.server.consoleview.DataConsoleView;
+import ru.parfenov.server.consoleview.PointValueConsoleView;
 import ru.parfenov.server.consoleview.UserConsoleView;
 import ru.parfenov.server.utility.Utility;
 
@@ -12,23 +12,23 @@ import java.io.IOException;
  */
 public class Authentication {
     private final UserConsoleView userConsoleView;
-    private final DataConsoleView dataConsoleView;
+    private final PointValueConsoleView pointValueConsoleView;
 
-    public Authentication(UserConsoleView userConsoleView, DataConsoleView dataConsoleView) {
+    public Authentication(UserConsoleView userConsoleView, PointValueConsoleView pointValueConsoleView) {
         this.userConsoleView = userConsoleView;
-        this.dataConsoleView = dataConsoleView;
+        this.pointValueConsoleView = pointValueConsoleView;
     }
 
     public void toAuth() throws IOException {
         String login = userConsoleView.enter();
         if (login.equals("admin")) {
-            AdminController controller = new AdminController(userConsoleView);
-            controller.toOperate();
+            AdminInterface adminInterface = new AdminInterface(userConsoleView);
+            adminInterface.toOperate();
         } else if (login.equals(Utility.exitWord)) {
             System.out.println("Exit!");
         } else {
-            ClientController controller = new ClientController(dataConsoleView);
-            controller.toOperate(login);
+            ClientInterface clientInterface = new ClientInterface(pointValueConsoleView);
+            clientInterface.toOperate(login);
         }
     }
 }
