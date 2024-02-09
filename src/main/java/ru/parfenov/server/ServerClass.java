@@ -4,8 +4,8 @@ import ru.parfenov.server.consoleview.PointValueConsoleView;
 import ru.parfenov.server.consoleview.UserConsoleView;
 import ru.parfenov.server.serverinterface.Authentication;
 import ru.parfenov.server.serverinterface.Registration;
-import ru.parfenov.server.service.PointValueService;
-import ru.parfenov.server.service.UserService;
+import ru.parfenov.server.service.JdbcPointValueService;
+import ru.parfenov.server.service.JdbcUserService;
 
 import java.io.IOException;
 
@@ -13,9 +13,9 @@ public class ServerClass {
     /**
      * Запуск сервисов
      */
-    private final PointValueService pointValueService = new PointValueService();
+    private final JdbcPointValueService pointValueService = new JdbcPointValueService();
     private final PointValueConsoleView pointValueConsoleView = new PointValueConsoleView(pointValueService);
-    private final UserService userService = new UserService();
+    private final JdbcUserService userService = new JdbcUserService();
     private final UserConsoleView userConsoleView = new UserConsoleView(userService, pointValueConsoleView);
 
     public ServerClass() {

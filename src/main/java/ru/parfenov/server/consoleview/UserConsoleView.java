@@ -1,6 +1,6 @@
 package ru.parfenov.server.consoleview;
 
-import ru.parfenov.server.service.UserService;
+import ru.parfenov.server.service.JdbcUserService;
 import ru.parfenov.server.utility.Utility;
 
 import java.io.BufferedReader;
@@ -8,11 +8,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class UserConsoleView {
-    private final UserService userService;
+    private final JdbcUserService userService;
     private final PointValueConsoleView pointValueConsoleView;
     private final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-    public UserConsoleView(UserService userService, PointValueConsoleView pointValueConsoleView) {
+    public UserConsoleView(JdbcUserService userService, PointValueConsoleView pointValueConsoleView) {
         this.userService = userService;
         this.pointValueConsoleView = pointValueConsoleView;
     }

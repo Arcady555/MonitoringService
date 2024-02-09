@@ -1,12 +1,18 @@
 package ru.parfenov.server.model;
 
 public class User {
-    private int id;
+    private Integer id;
     private String login;
     private String password;
     private String history;
 
     public User() {
+    }
+
+    public User(int id, String login, String history) {
+        this.id = id;
+        this.login = login;
+        this.history = history;
     }
 
     public User(int id, String login, String password, String history) {

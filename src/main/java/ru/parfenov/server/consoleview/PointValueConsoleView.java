@@ -1,7 +1,7 @@
 package ru.parfenov.server.consoleview;
 
 import ru.parfenov.server.model.PointValue;
-import ru.parfenov.server.service.PointValueService;
+import ru.parfenov.server.service.JdbcPointValueService;
 import ru.parfenov.server.utility.Utility;
 
 import java.io.BufferedReader;
@@ -16,11 +16,11 @@ import java.util.List;
  * Данный класс служит для работы пользователя(не админа) со своими данными
  */
 public class PointValueConsoleView {
-    private final PointValueService pointValueService;
+    private final JdbcPointValueService pointValueService;
 
     BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-    public PointValueConsoleView(PointValueService pointValueService) {
+    public PointValueConsoleView(JdbcPointValueService pointValueService) {
         this.pointValueService = pointValueService;
     }
 
@@ -63,7 +63,7 @@ public class PointValueConsoleView {
             } else {
                 System.out.println("This month data is already exist!!!" + System.lineSeparator());
             }
-        } catch (NumberFormatException | SQLException | ClassNotFoundException e) {
+        } catch (NumberFormatException e) {
             System.out.println("Enter correct!!!" + System.lineSeparator());
             inputForSubmitData(login);
         }

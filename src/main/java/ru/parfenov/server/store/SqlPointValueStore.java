@@ -50,7 +50,7 @@ public class SqlPointValueStore implements PointValueStore {
     public Optional<List<PointValue>> findByUser(User user) {
         List<PointValue> points = new ArrayList<>();
         try (PreparedStatement statement = connection.prepareStatement(
-                "SELECT * FROM point_value where user_id=?")
+                "SELECT id, user_id, date, point, \"value\" FROM point_value where user_id=?")
         ) {
             statement.setInt(1, user.getId());
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -74,7 +74,7 @@ public class SqlPointValueStore implements PointValueStore {
     public Optional<List<PointValue>> getLastData(int userId) {
         List<PointValue> points = new ArrayList<>();
         try (PreparedStatement statement = connection.prepareStatement(
-                "SELECT *"
+                "SELECT id, user_id, date, point, \"value\""
                         + "  FROM point_value where user_id=? and date=(SELECT date"
                         + "  FROM point_value where user_id=?"
                         + "  ORDER BY date DESC"
