@@ -30,12 +30,13 @@ public class JdbcPointValueService implements PointValueService {
                     pointValue.setDate(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES));
                     pointValueStore.create(pointValue);
                     fixTime(userStore, login, "submit data");
-                    userStore.close();
-                    pointValueStore.close();
+
                 }
             } else {
                 System.out.println("no user!!!");
             }
+            userStore.close();
+            pointValueStore.close();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
