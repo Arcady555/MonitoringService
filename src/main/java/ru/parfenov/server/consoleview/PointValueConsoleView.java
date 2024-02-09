@@ -7,6 +7,7 @@ import ru.parfenov.server.utility.Utility;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +63,7 @@ public class PointValueConsoleView {
             } else {
                 System.out.println("This month data is already exist!!!" + System.lineSeparator());
             }
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException | SQLException | ClassNotFoundException e) {
             System.out.println("Enter correct!!!" + System.lineSeparator());
             inputForSubmitData(login);
         }
@@ -73,7 +74,7 @@ public class PointValueConsoleView {
      *
      * @param login
      */
-    public void viewLastData(String login) {
+    public void viewLastData(String login) throws Exception {
         pointValueService.viewLastData(login);
     }
 
@@ -83,7 +84,7 @@ public class PointValueConsoleView {
      * @param login
      * @throws IOException
      */
-    public void inputForViewDataForSpecMonth(String login) throws IOException {
+    public void inputForViewDataForSpecMonth(String login) throws Exception {
         System.out.println("Which year are You interesting?");
         System.out.println("Please enter the number " + Utility.firstYear + "-" + LocalDateTime.now().getYear());
         int year = Integer.parseInt(reader.readLine());
@@ -103,7 +104,7 @@ public class PointValueConsoleView {
                 } else {
                     pointValueService.viewDataForSpecMonth(login, month, year);
                 }
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException | SQLException | ClassNotFoundException e) {
                 System.out.println("Enter correct!!!" + System.lineSeparator());
                 inputForViewDataForSpecMonth(login);
             }
@@ -115,11 +116,11 @@ public class PointValueConsoleView {
      *
      * @param login
      */
-    public void viewDataHistory(String login) {
+    public void viewDataHistory(String login) throws Exception {
         pointValueService.viewDataHistory(login);
     }
 
-    public void out(String login) {
+    public void out(String login) throws Exception {
         pointValueService.toOut(login);
     }
 

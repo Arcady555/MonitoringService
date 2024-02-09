@@ -3,29 +3,32 @@ package ru.parfenov.server.store;
 import ru.parfenov.server.model.PointValue;
 import ru.parfenov.server.model.User;
 
-import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static ru.parfenov.server.utility.Utility.loadConnection;
+import static ru.parfenov.server.utility.ConnectionUtility.loadConnection;
 
 public class SqlPointValueStore implements PointValueStore {
     private final Connection connection;
 
-    public SqlPointValueStore() throws Exception {
-        InputStream in = SqlPointValueStore.class.getClassLoader()
-                .getResourceAsStream("db/liquibase.properties");
-        this.connection = loadConnection(in);
+    public SqlPointValueStore() throws SQLException, ClassNotFoundException {
+        connection = loadConnection(SqlPointValueStore
+                .class.getClassLoader()
+                .getResourceAsStream("db/liquibase.properties"));
     }
 
-    public SqlPointValueStore(Connection connection) throws Exception {
+    public SqlPointValueStore(Connection connection) {
         this.connection = connection;
+    }
+
+    @Override
+    public void close() throws Exception {
+        if (connection != null) {
+            connection.close();
+        }
     }
 
     @Override
@@ -46,8 +49,9 @@ public class SqlPointValueStore implements PointValueStore {
     @Override
     public Optional<List<PointValue>> findByUser(User user) {
         List<PointValue> points = new ArrayList<>();
-        try (PreparedStatement statement = connection
-                .prepareStatement("SELECT * FROM point_value where user_id=?")) {
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT * FROM point_value where user_id=?")
+        ) {
             statement.setInt(1, user.getId());
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
@@ -69,8 +73,8 @@ public class SqlPointValueStore implements PointValueStore {
     @Override
     public Optional<List<PointValue>> getLastData(int userId) {
         List<PointValue> points = new ArrayList<>();
-        try (PreparedStatement statement = connection
-                .prepareStatement("SELECT *"
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT *"
                         + "  FROM point_value where user_id=? and date=(SELECT date"
                         + "  FROM point_value where user_id=?"
                         + "  ORDER BY date DESC"

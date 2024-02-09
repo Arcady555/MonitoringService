@@ -4,8 +4,6 @@ import ru.parfenov.server.consoleview.PointValueConsoleView;
 import ru.parfenov.server.consoleview.UserConsoleView;
 import ru.parfenov.server.utility.Utility;
 
-import java.io.IOException;
-
 /**
  * Авторизация
  * Здесь уже есть разделение пользователей на админа и остальных
@@ -19,7 +17,7 @@ public class Authentication {
         this.pointValueConsoleView = pointValueConsoleView;
     }
 
-    public void toAuth() throws IOException {
+    public void toAuth() throws Exception {
         String login = userConsoleView.enter();
         if (login.equals("admin")) {
             AdminInterface adminInterface = new AdminInterface(userConsoleView);

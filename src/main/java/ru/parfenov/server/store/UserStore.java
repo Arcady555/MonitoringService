@@ -5,6 +5,8 @@ import ru.parfenov.server.model.User;
 import java.util.List;
 
 public interface UserStore {
+    void close() throws Exception;
+
     List<User> getAll();
 
     User findById(int userId);

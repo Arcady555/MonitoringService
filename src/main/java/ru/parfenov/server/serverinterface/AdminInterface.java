@@ -3,7 +3,6 @@ package ru.parfenov.server.serverinterface;
 import ru.parfenov.server.consoleview.UserConsoleView;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class AdminInterface {
@@ -13,7 +12,7 @@ public class AdminInterface {
         this.userConsoleView = userConsoleView;
     }
 
-    public void toOperate() throws IOException {
+    public void toOperate() throws Exception {
         BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
 
         while (true) {

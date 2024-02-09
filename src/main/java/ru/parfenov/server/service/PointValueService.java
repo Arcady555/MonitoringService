@@ -2,8 +2,11 @@ package ru.parfenov.server.service;
 
 import ru.parfenov.server.model.PointValue;
 import ru.parfenov.server.store.PointValueStore;
+import ru.parfenov.server.store.SqlPointValueStore;
+import ru.parfenov.server.store.SqlUserStore;
 import ru.parfenov.server.store.UserStore;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.temporal.ChronoUnit;
@@ -13,15 +16,10 @@ import java.util.Optional;
 import static ru.parfenov.server.utility.Utility.fixTime;
 
 public class PointValueService {
-    private final UserStore userStore;
-    private final PointValueStore pointValueStore;
 
-    public PointValueService(UserStore userStore, PointValueStore pointValueStore) {
-        this.userStore = userStore;
-        this.pointValueStore = pointValueStore;
-    }
-
-    public void submitData(String login, List<PointValue> list) {
+    public void submitData(String login, List<PointValue> list) throws SQLException, ClassNotFoundException {
+        UserStore userStore = new SqlUserStore();
+        PointValueStore pointValueStore = new SqlPointValueStore();
         int userId = userStore.getByLogin(login).getId();
         for (PointValue pointValue : list) {
             pointValue.setUserId(userId);
@@ -31,7 +29,9 @@ public class PointValueService {
         fixTime(userStore, login, "submit data");
     }
 
-    public void viewLastData(String login) {
+    public void viewLastData(String login) throws SQLException, ClassNotFoundException {
+        UserStore userStore = new SqlUserStore();
+        PointValueStore pointValueStore = new SqlPointValueStore();
         Optional<List<PointValue>> data = pointValueStore.getLastData(userStore.getByLogin(login).getId());
         if (data.isEmpty()) {
             System.out.println("No data!!!" + System.lineSeparator());
@@ -41,7 +41,9 @@ public class PointValueService {
         fixTime(userStore, login, "view last data");
     }
 
-    public void viewDataForSpecMonth(String login, int month, int year) {
+    public void viewDataForSpecMonth(String login, int month, int year) throws SQLException, ClassNotFoundException {
+        UserStore userStore = new SqlUserStore();
+        PointValueStore pointValueStore = new SqlPointValueStore();
         String dateString;
         if (month < 10) {
             dateString = year + "-0" + month + "-01T01:01:01";
@@ -59,7 +61,9 @@ public class PointValueService {
         fixTime(userStore, login, "view data for spec month");
     }
 
-    public void viewDataHistory(String login) {
+    public void viewDataHistory(String login) throws SQLException, ClassNotFoundException {
+        UserStore userStore = new SqlUserStore();
+        PointValueStore pointValueStore = new SqlPointValueStore();
         Optional<List<PointValue>> dataListOptional = pointValueStore.findByUser(userStore.getByLogin(login));
         if (dataListOptional.isPresent()) {
             List<PointValue> dataList = dataListOptional.get();
@@ -70,7 +74,8 @@ public class PointValueService {
         fixTime(userStore, login, "view data history");
     }
 
-    public void toOut(String login) {
+    public void toOut(String login) throws SQLException, ClassNotFoundException {
+        UserStore userStore = new SqlUserStore();
         fixTime(userStore, login, "out");
     }
 
@@ -83,7 +88,9 @@ public class PointValueService {
      * @param login
      * @return
      */
-    public boolean validationOnceInMonth(String login) {
+    public boolean validationOnceInMonth(String login) throws SQLException, ClassNotFoundException {
+        UserStore userStore = new SqlUserStore();
+        PointValueStore pointValueStore = new SqlPointValueStore();
         boolean rsl;
         Optional<List<PointValue>> data = pointValueStore.getLastData(userStore.getByLogin(login).getId());
         if (data.isEmpty()) {
@@ -103,7 +110,8 @@ public class PointValueService {
      *
      * @param data
      */
-    private void printDataFromDataStore(List<PointValue> data) {
+    private void printDataFromDataStore(List<PointValue> data) throws SQLException, ClassNotFoundException {
+        UserStore userStore = new SqlUserStore();
         PointValue firstPoint = data.get(0);
         System.out.println(
                 userStore.findById(firstPoint.getUserId()).getLogin()

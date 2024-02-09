@@ -12,7 +12,7 @@ import java.sql.SQLException;
 
 @Testcontainers
 class SqlUserStoreTest {
-    private static Connection connection;
+    private static Connection testConnection;
     private static SqlUserStore userStore;
 
     @Container
@@ -36,18 +36,18 @@ class SqlUserStoreTest {
 
     @BeforeAll
     public static void initConnection() throws Exception {
-        connection = DriverManager.getConnection(
+        testConnection = DriverManager.getConnection(
                 postgreSQLContainer.getJdbcUrl(),
                 postgreSQLContainer.getUsername(),
                 postgreSQLContainer.getPassword());
-        userStore = new SqlUserStore(connection);
+        userStore = new SqlUserStore(testConnection);                ///////////////////////////
         User user = new User(0, "Arcady", "password", "history");
         userStore.create(user);
     }
 
     @AfterAll
     public static void closeConnection() throws SQLException {
-        connection.close();
+        testConnection.close();
     }
 
     @Test

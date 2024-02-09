@@ -18,7 +18,7 @@ import java.time.Month;
 
 @Testcontainers
 class SqlPointValueStoreTest {
-    private static Connection connection;
+    private static Connection testConnection;
     private static SqlPointValueStore dataStore;
     private static User user;
 
@@ -43,11 +43,11 @@ class SqlPointValueStoreTest {
 
     @BeforeAll
     public static void initConnection() throws Exception {
-        connection = DriverManager.getConnection(
+        testConnection = DriverManager.getConnection(
                 postgreSQLContainer.getJdbcUrl(),
                 postgreSQLContainer.getUsername(),
                 postgreSQLContainer.getPassword());
-        dataStore = new SqlPointValueStore(connection);
+        dataStore = new SqlPointValueStore(testConnection);
         user = new User(1, "Arcady", "password", "history");
         PointValue pointValue = new PointValue(
                 0, 1, LocalDateTime.of(2024, Month.JANUARY, 22, 10, 10),
@@ -58,7 +58,7 @@ class SqlPointValueStoreTest {
 
     @AfterAll
     public static void closeConnection() throws SQLException {
-        connection.close();
+        testConnection.close();
     }
 
     @Test

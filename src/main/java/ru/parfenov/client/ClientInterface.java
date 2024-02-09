@@ -3,7 +3,6 @@ package ru.parfenov.client;
 import ru.parfenov.server.ServerClass;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
@@ -18,10 +17,10 @@ public class ClientInterface {
     ServerClass server = new ServerClass();
     BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
 
-    public ClientInterface() throws Exception {
+    public ClientInterface() {
     }
 
-    public void run() throws IOException {
+    public void run() throws Exception {
         System.out.println("""
                 Please enter:
                 1 - register

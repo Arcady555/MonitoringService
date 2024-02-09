@@ -2,7 +2,6 @@ package ru.parfenov.server.store;
 
 import ru.parfenov.server.model.User;
 
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,19 +9,26 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.parfenov.server.utility.Utility.loadConnection;
+import static ru.parfenov.server.utility.ConnectionUtility.loadConnection;
 
 public class SqlUserStore implements UserStore {
     private final Connection connection;
 
-    public SqlUserStore() throws Exception {
-        InputStream in = SqlUserStore.class.getClassLoader()
-                .getResourceAsStream("db/liquibase.properties");
-        this.connection = loadConnection(in);
+    public SqlUserStore() throws SQLException, ClassNotFoundException {
+        connection = loadConnection(SqlUserStore
+                .class.getClassLoader()
+                .getResourceAsStream("db/liquibase.properties"));
     }
 
-    public SqlUserStore(Connection connection) throws Exception {
+    public SqlUserStore(Connection connection) {
         this.connection = connection;
+    }
+
+    @Override
+    public void close() throws Exception {
+        if (connection != null) {
+            connection.close();
+        }
     }
 
     @Override

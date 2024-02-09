@@ -23,7 +23,7 @@ public class UserConsoleView {
      *
      * @throws IOException
      */
-    public void inputForReg() throws IOException {
+    public void inputForReg() throws Exception {
         System.out.println("Create name");
         String login = reader.readLine();
         if (userService.getByLogin(login) != null) {
@@ -44,7 +44,7 @@ public class UserConsoleView {
      * @return
      * @throws IOException
      */
-    public String enter() throws IOException {
+    public String enter() throws Exception {
         System.out.println("Введите имя (или exit)");
         String login = reader.readLine();
         if (login.equals(Utility.exitWord)) {
@@ -72,7 +72,7 @@ public class UserConsoleView {
     /**
      * Список всех пользователей
      */
-    public void viewAllUsers() {
+    public void viewAllUsers() throws Exception {
         userService.viewAllUsers();
     }
 
@@ -81,7 +81,7 @@ public class UserConsoleView {
      *
      * @throws IOException
      */
-    public void inputForViewLastDataOfUser() throws IOException {
+    public void inputForViewLastDataOfUser() throws Exception {
         System.out.println("Enter login of user");
         String login = reader.readLine();
         pointValueConsoleView.viewLastData(login);
@@ -92,7 +92,7 @@ public class UserConsoleView {
      *
      * @throws IOException
      */
-    public void inputDataForSpecMonthOfUser() throws IOException {
+    public void inputDataForSpecMonthOfUser() throws Exception {
         System.out.println("Enter login of user");
         String login = reader.readLine();
         pointValueConsoleView.inputForViewDataForSpecMonth(login);
@@ -103,7 +103,7 @@ public class UserConsoleView {
      *
      * @throws IOException
      */
-    public void inputForViewDataHistoryOfUser() throws IOException {
+    public void inputForViewDataHistoryOfUser() throws Exception {
         System.out.println("Enter login of user");
         String login = reader.readLine();
         pointValueConsoleView.viewDataHistory(login);
@@ -114,7 +114,7 @@ public class UserConsoleView {
      *
      * @throws IOException
      */
-    public void inputForViewUserHistory() throws IOException {
+    public void inputForViewUserHistory() throws Exception {
         System.out.println("Enter login of user");
         String login = reader.readLine();
         userService.viewUserHistory(login);

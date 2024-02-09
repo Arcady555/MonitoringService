@@ -3,7 +3,6 @@ package ru.parfenov.server.serverinterface;
 import ru.parfenov.server.consoleview.PointValueConsoleView;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class ClientInterface {
@@ -13,7 +12,7 @@ public class ClientInterface {
         this.pointValueConsoleView = pointValueConsoleView;
     }
 
-    public void toOperate(String login) throws IOException {
+    public void toOperate(String login) throws Exception {
         BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
 
         while (true) {

@@ -2,8 +2,6 @@ package ru.parfenov.server.serverinterface;
 
 import ru.parfenov.server.consoleview.UserConsoleView;
 
-import java.io.IOException;
-
 public class Registration {
     private final UserConsoleView userConsoleView;
 
@@ -11,7 +9,7 @@ public class Registration {
         this.userConsoleView = userConsoleView;
     }
 
-    public void toReg() throws IOException {
+    public void toReg() throws Exception {
         userConsoleView.inputForReg();
     }
 }

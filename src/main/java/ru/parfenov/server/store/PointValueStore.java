@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PointValueStore {
+    void close() throws Exception;
+
     void create(PointValue pointValue);
 
     Optional<List<PointValue>> findByUser(User user);
