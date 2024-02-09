@@ -16,7 +16,7 @@ public class Utility {
                 + " "
                 + nameOfMethod
                 + System.lineSeparator());
-        User user = userStore.getByLogin(login);
+        User user = userStore.getByLogin(login).get();
         String newHistory = user.getHistory() + history;
         userStore.insertUserHistory(user, newHistory);
     }
