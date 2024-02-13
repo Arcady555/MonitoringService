@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                      http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1"
+         metadata-complete="true">
+
+    <display-name>SimpeServletDisplayName</display-name>
+    <description>
+        This is SimpeServlet
+    </description>
+
+
+    <servlet>
+        <servlet-name>servletName1</servlet-name>
+        <servlet-class>ru.parfenov.server.servlets.start.StartServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>servletName2</servlet-name>
+        <servlet-class>ru.parfenov.server.servlets.start.reg.RegServlet</servlet-class>
+    </servlet>
+
+
+    <servlet-mapping>
+        <servlet-name>servletName1</servlet-name>
+        <url-pattern>/start</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>servletName2</servlet-name>
+        <url-pattern>/registration</url-pattern>
+    </servlet-mapping>
+
+</web-app>
