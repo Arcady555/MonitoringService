@@ -54,7 +54,9 @@
         <testcontainers.jupiter.version>1.19.4</testcontainers.jupiter.version>
         <testcontainers.postgresql.version>1.17.6</testcontainers.postgresql.version>
         <javax.servlet.version>4.0.1</javax.servlet.version>
-
+        <gson.version>2.10</gson.version>
+        <jackson.version>2.15.1</jackson.version>
+        <mapstruct.version>1.6.0.Beta1</mapstruct.version>
     </properties>
 
     <dependencies>
@@ -112,6 +114,18 @@
             <artifactId>javax.servlet-api</artifactId>
             <version>${javax.servlet.version}</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${mapstruct.version}</version>
         </dependency>
 
     </dependencies>
@@ -222,6 +236,20 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>1.6.0.Beta1</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
             </plugin>
         </plugins>
     </build>

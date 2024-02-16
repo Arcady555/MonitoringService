@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <title>Регистрация</title>
+</head>
+<body>
+<h3>Выполните вход!</h3>
+
+<div class="container py-3">
+    <main class="form-signin">
+        <h1 class="h3 mb-3 fw-normal">Вход</h1>
+        <div class="alert alert-danger" role="alert" th:if="${not #lists.isEmpty(errorMessage)}">
+            <span th:text="${errorMessage}"></span>
+        </div>
+        <!--  Mo -->
+        <form method="post" th:action="@{/Mo/login}">
+
+            <div class="form-floating mb-3">
+                <input class="form-control" id="login" name="login" type="text">
+                <label for="login">Login</label>
+            </div>
+            <div class="form-floating">
+                <input class="form-control" id="password" name="password" type="text">
+                <label for="password">Password</label>
+            </div>
+            <hr class="my-4">
+            <!--  Mo -->
+            <hr class="my-4">
+            <button class="w-100 btn btn-lg btn-primary" type="submit">Войти</button>
+        </form>
+    </main>
+</div>
+</body>
+</html>

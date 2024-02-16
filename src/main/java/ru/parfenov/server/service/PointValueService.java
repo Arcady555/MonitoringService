@@ -7,11 +7,11 @@ import java.util.List;
 public interface PointValueService {
     void submitData(String login, List<PointValue> list);
 
-    void viewLastData(String login);
+    List<PointValue> viewLastData(String login);
 
-    void viewDataForSpecMonth(String login, int month, int year);
+    List<PointValue> viewDataForSpecMonth(String login, int month, int year);
 
-    void viewDataHistory(String login);
+    List<PointValue> viewDataHistory(String login);
 
     void toOut(String login);
 

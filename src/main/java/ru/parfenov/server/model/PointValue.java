@@ -9,6 +9,9 @@ public class PointValue {
     private String point;
     private Integer value;
 
+    public PointValue() {
+    }
+
     public PointValue(String point, int value) {
         this.point = point;
         this.value = value;

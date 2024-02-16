@@ -43,7 +43,8 @@ public class JdbcPointValueService implements PointValueService {
     }
 
     @Override
-    public void viewLastData(String login) {
+    public List<PointValue> viewLastData(String login) {
+        List<PointValue> listResult = null;
         try {
             UserStore userStore = new SqlUserStore();
             PointValueStore pointValueStore = new SqlPointValueStore();
@@ -54,7 +55,8 @@ public class JdbcPointValueService implements PointValueService {
                 if (data.isEmpty()) {
                     System.out.println("No data!!!" + System.lineSeparator());
                 } else {
-                    printDataFromDataStore(data.get());
+                    listResult = data.get();
+                    printDataFromDataStore(listResult);
                 }
                 fixTime(userStore, login, "view last data");
             } else {
@@ -65,10 +67,12 @@ public class JdbcPointValueService implements PointValueService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return listResult;
     }
 
     @Override
-    public void viewDataForSpecMonth(String login, int month, int year) {
+    public List<PointValue> viewDataForSpecMonth(String login, int month, int year) {
+        List<PointValue> listResult = null;
         try {
             UserStore userStore = new SqlUserStore();
             PointValueStore pointValueStore = new SqlPointValueStore();
@@ -85,8 +89,10 @@ public class JdbcPointValueService implements PointValueService {
                 if (data.isEmpty()) {
                     System.out.println("No data!!!" + System.lineSeparator());
                 } else {
-                    printDataFromDataStore(data.get());
+                    listResult = data.get();
+                    printDataFromDataStore(listResult);
                     System.out.println(System.lineSeparator());
+
                 }
                 fixTime(userStore, login, "view data for spec month");
             } else {
@@ -97,10 +103,12 @@ public class JdbcPointValueService implements PointValueService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return listResult;
     }
 
     @Override
-    public void viewDataHistory(String login) {
+    public List<PointValue> viewDataHistory(String login) {
+        List<PointValue> listResult = null;
         try {
             UserStore userStore = new SqlUserStore();
             PointValueStore pointValueStore = new SqlPointValueStore();
@@ -108,8 +116,8 @@ public class JdbcPointValueService implements PointValueService {
             if (userOptional.isPresent()) {
                 Optional<List<PointValue>> dataListOptional = pointValueStore.findByUser(userOptional.get());
                 if (dataListOptional.isPresent()) {
-                    List<PointValue> dataList = dataListOptional.get();
-                    printDataFromDataStore(dataList);
+                    listResult = dataListOptional.get();
+                    printDataFromDataStore(listResult);
                 } else {
                     System.out.println("No data!!!" + System.lineSeparator());
                 }
@@ -122,6 +130,7 @@ public class JdbcPointValueService implements PointValueService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return listResult;
     }
 
     @Override

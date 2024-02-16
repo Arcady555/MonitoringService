@@ -6,6 +6,8 @@ import ru.parfenov.server.store.UserStore;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static ru.parfenov.server.utility.Utility.fixTime;
@@ -42,26 +44,27 @@ public class JdbcUserService implements UserService {
     }
 
     @Override
-    public void viewAllUsers() {
+    public List<User> viewAllUsers() {
+        List<User> list = new ArrayList<>();
         try {
             UserStore userStore = new SqlUserStore();
-            for (User user : userStore.getAll()) {
-                System.out.println(user.getId() + " " + user.getLogin());
-            }
+            list = userStore.getAll();
             userStore.close();
-            System.out.println(System.lineSeparator());
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return list;
     }
 
     @Override
-    public void viewUserHistory(String login) {
+    public String viewUserHistory(String login) {
+        String result = "";
         try {
             UserStore userStore = new SqlUserStore();
             Optional<User> userOptional = userStore.getByLogin(login);
             if (userOptional.isPresent()) {
-                System.out.println(userOptional.get().getHistory());
+                result = userOptional.get().getHistory();
+                System.out.println(result);
             } else {
                 System.out.println("no user!");
             }
@@ -69,6 +72,7 @@ public class JdbcUserService implements UserService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return result;
     }
 
     @Override

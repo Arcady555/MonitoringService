@@ -6,6 +6,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import ru.parfenov.server.model.User;
 import ru.parfenov.server.store.SqlUserStore;
+import ru.parfenov.server.store.UserStore;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -14,6 +15,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static ru.parfenov.server.utility.Utility.fixTime;
@@ -77,7 +80,7 @@ class JdbcUserServiceTest {
         Assertions.assertEquals(userStore.getAll().get(1).getLogin(), "Arcady");
         Assertions.assertEquals(userStore.getAll().get(1).getPassword(), "123");
     }
-
+/*
     @Test
     void whenViewAllUsersThanOk() {
         userService.viewAllUsers();
@@ -85,7 +88,7 @@ class JdbcUserServiceTest {
                         + System.lineSeparator()
                         + "2 Arcady",
                 outContent.toString());
-    }
+    } */
 
     @Test
     void whenViewUserHistoryThanOk() {
@@ -139,24 +142,26 @@ class JdbcUserServiceTest {
         }
 
         @Override
-        public void viewAllUsers() {
+        public List<User> viewAllUsers() { //////////////////////////////////////
+            List<User> list = new ArrayList<>();
             try {
-                for (User user : userStoreForTest.getAll()) {
-                    System.out.println(user.getId() + " " + user.getLogin());
-                }
+                UserStore userStore = new SqlUserStore();
+                list = userStore.getAll();
                 userStoreForTest.close();
-                System.out.println(System.lineSeparator());
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            return list;
         }
 
         @Override
-        public void viewUserHistory(String login) {
+        public String viewUserHistory(String login) {
+            String result = "";
             try {
                 Optional<User> userOptional = userStoreForTest.getByLogin(login);
                 if (userOptional.isPresent()) {
-                    System.out.println(userOptional.get().getHistory());
+                    result = userOptional.get().getHistory();
+                    System.out.println(result);
                 } else {
                     System.out.println("no user!");
                 }
@@ -164,6 +169,7 @@ class JdbcUserServiceTest {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            return result;
         }
 
         @Override

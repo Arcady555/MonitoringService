@@ -6,8 +6,10 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import ru.parfenov.server.model.PointValue;
 import ru.parfenov.server.model.User;
+import ru.parfenov.server.store.PointValueStore;
 import ru.parfenov.server.store.SqlPointValueStore;
 import ru.parfenov.server.store.SqlUserStore;
+import ru.parfenov.server.store.UserStore;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -143,51 +145,55 @@ class JdbcPointValueServiceTest {
         @Override
         public void submitData(String login, List<PointValue> list) {
             try {
-                Optional<User> userOptional = userStoreForTest.getByLogin(login);
+                Optional<User> userOptional = userStore.getByLogin(login);
                 int userId = userOptional.map(User::getId).orElse(-1);
                 if (userId != -1) {
                     for (PointValue pointValue : list) {
                         pointValue.setUserId(userId);
                         pointValue.setDate(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES));
-                        pointValueStoreForTest.create(pointValue);
-                        fixTime(userStoreForTest, login, "submit data");
+                        pointValueStore.create(pointValue);
+                        fixTime(userStore, login, "submit data");
 
                     }
                 } else {
                     System.out.println("no user!!!");
                 }
-                userStoreForTest.close();
-                pointValueStoreForTest.close();
+                userStore.close();
+                pointValueStore.close();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
 
         @Override
-        public void viewLastData(String login) {
+        public List<PointValue> viewLastData(String login) {
+            List<PointValue> listResult = null;
             try {
-                Optional<User> userOptional = userStoreForTest.getByLogin(login);
+                Optional<User> userOptional = userStore.getByLogin(login);
                 int userId = userOptional.map(User::getId).orElse(-1);
                 if (userId != -1) {
-                    Optional<List<PointValue>> data = pointValueStoreForTest.getLastData(userId);
+                    Optional<List<PointValue>> data = pointValueStore.getLastData(userId);
                     if (data.isEmpty()) {
                         System.out.println("No data!!!" + System.lineSeparator());
                     } else {
-                        printDataFromDataStore(data.get());
+                        listResult = data.get();
+                        printDataFromDataStore(listResult);
                     }
-                    fixTime(userStoreForTest, login, "view last data");
+                    fixTime(userStore, login, "view last data");
                 } else {
                     System.out.println("no user!!!");
                 }
-                userStoreForTest.close();
-                pointValueStoreForTest.close();
+                userStore.close();
+                pointValueStore.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            return listResult;
         }
 
         @Override
-        public void viewDataForSpecMonth(String login, int month, int year) {
+        public List<PointValue> viewDataForSpecMonth(String login, int month, int year) {
+            List<PointValue> listResult = null;
             try {
                 String dateString;
                 if (month < 10) {
@@ -196,67 +202,82 @@ class JdbcPointValueServiceTest {
                     dateString = year + "-" + month + "-01T01:01:01";
                 }
                 LocalDateTime date = LocalDateTime.parse(dateString);
-                Optional<User> userOptional = userStoreForTest.getByLogin(login);
+                Optional<User> userOptional = userStore.getByLogin(login);
                 if (userOptional.isPresent()) {
-                    Optional<List<PointValue>> data = pointValueStoreForTest.getDataForSpecMonth(userOptional.get(), date);
+                    Optional<List<PointValue>> data = pointValueStore.getDataForSpecMonth(userOptional.get(), date);
                     if (data.isEmpty()) {
                         System.out.println("No data!!!" + System.lineSeparator());
                     } else {
-                        printDataFromDataStore(data.get());
+                        listResult = data.get();
+                        printDataFromDataStore(listResult);
                         System.out.println(System.lineSeparator());
+
                     }
-                    fixTime(userStoreForTest, login, "view data for spec month");
+                    fixTime(userStore, login, "view data for spec month");
                 } else {
                     System.out.println("no user!!!");
                 }
-                userStoreForTest.close();
-                pointValueStoreForTest.close();
+                userStore.close();
+                pointValueStore.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            return listResult;
         }
 
         @Override
-        public void viewDataHistory(String login) {
+        public List<PointValue> viewDataHistory(String login) {
+            List<PointValue> listResult = null;
             try {
-                Optional<User> userOptional = userStoreForTest.getByLogin(login);
+                Optional<User> userOptional = userStore.getByLogin(login);
                 if (userOptional.isPresent()) {
-                    Optional<List<PointValue>> dataListOptional = pointValueStoreForTest.findByUser(userOptional.get());
+                    Optional<List<PointValue>> dataListOptional = pointValueStore.findByUser(userOptional.get());
                     if (dataListOptional.isPresent()) {
-                        List<PointValue> dataList = dataListOptional.get();
-                        printDataFromDataStore(dataList);
+                        listResult = dataListOptional.get();
+                        printDataFromDataStore(listResult);
                     } else {
                         System.out.println("No data!!!" + System.lineSeparator());
                     }
-                    fixTime(userStoreForTest, login, "view data history");
+                    fixTime(userStore, login, "view data history");
                 } else {
                     System.out.println("no user!!!");
                 }
-                userStoreForTest.close();
-                pointValueStoreForTest.close();
+                userStore.close();
+                pointValueStore.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            return listResult;
         }
 
         @Override
         public void toOut(String login) {
             try {
-                fixTime(userStoreForTest, login, "out");
-                userStoreForTest.close();
+                UserStore userStore = new SqlUserStore();
+                fixTime(userStore, login, "out");
+                userStore.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
         }
 
+        /**
+         * Выполняет проверку в методе submitData(),
+         * который может выполняться только один раз и в текущем месяце.
+         * Если в текущем месяце уже есть данные(актуальные, последние данные)
+         * - значит ждите следующего месяца))
+         *
+         * @param login
+         * @return
+         */
         @Override
         public boolean validationOnceInMonth(String login) {
             boolean rsl = false;
             try {
-                Optional<User> userOptional = userStoreForTest.getByLogin(login);
+                Optional<User> userOptional = userStore.getByLogin(login);
                 if (userOptional.isPresent()) {
-                    Optional<List<PointValue>> data = pointValueStoreForTest.getLastData(userOptional.get().getId());
+                    Optional<List<PointValue>> data = pointValueStore.getLastData(userOptional.get().getId());
                     if (data.isEmpty()) {
                         rsl = true;
                     } else {
@@ -267,17 +288,22 @@ class JdbcPointValueServiceTest {
                         rsl = !(curMonth.equals(lastMonth) && curYear == lastYear);
                     }
                 }
-                userStoreForTest.close();
-                pointValueStoreForTest.close();
+                userStore.close();
+                pointValueStore.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
             return rsl;
         }
 
+        /**
+         * Распечатка данных, полученных из хранилища
+         *
+         * @param data
+         */
         private void printDataFromDataStore(List<PointValue> data) throws Exception {
             PointValue firstPoint = data.get(0);
-            Optional<User> userOptional = userStoreForTest.findById(firstPoint.getUserId());
+            Optional<User> userOptional = userStore.findById(firstPoint.getUserId());
             if (userOptional.isPresent()) {
                 System.out.println(
                         userOptional.get().getLogin()
@@ -304,7 +330,7 @@ class JdbcPointValueServiceTest {
             } else {
                 System.out.println("no user!!!");
             }
-            userStoreForTest.close();
+            userStore.close();
         }
     }
 }

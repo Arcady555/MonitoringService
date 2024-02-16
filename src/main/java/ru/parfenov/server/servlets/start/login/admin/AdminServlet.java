@@ -13,10 +13,11 @@ public class AdminServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
             ServletException {
-        request.getRequestDispatcher("/jsp/admin.html").forward(request, response);
+        request.getRequestDispatcher("/jsp/login/admin/admin.html").forward(request, response);
     }
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
     }
 }

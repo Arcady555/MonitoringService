@@ -7,6 +7,10 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class ConnectionUtility {
+
+    private ConnectionUtility() {
+    }
+
     public static Connection loadConnection(InputStream in) throws ClassNotFoundException, SQLException {
         var config = new Properties();
         Connection connection;

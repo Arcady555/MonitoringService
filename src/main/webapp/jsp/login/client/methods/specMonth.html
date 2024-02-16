@@ -1,0 +1,35 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Поиск данных за конкретный месяц</title>
+</head>
+<body>
+<h3>Поиск данных за конкретный месяц</h3>
+
+<div class="container py-3">
+    <main class="form-signin">
+        <h1 class="h3 mb-3 fw-normal">Введите месяц и год:</h1>
+        <div th:if="${not #lists.isEmpty(errorMessage)}" class="alert alert-danger" role="alert">
+            <span th:text="${errorMessage}"></span>
+        </div>
+        <!--  Mo -->
+        <form th:action="@{/Mo/spec-month}" method="post">
+            Введите месяц(1-12)
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="month" name="month">
+                <label for="month">month</label>
+            </div>
+            Введите год(2015-2024)
+            <div class="form-floating">
+                <input type="text" class="form-control" id="year" name="year">
+                <label for="year">year</label>
+            </div>
+            <hr class="my-4">
+            <button type="submit" class="w-100 btn btn-lg btn-primary">Ввести</button>
+        </form>
+    </main>
+</div>
+</body>
+</html>
