@@ -2,7 +2,7 @@
 
 ## Welcome!
 
-Работа в консоли. С сохранением данных в БД
+WEB приложение. С сохранением данных в БД
 
 ## Используемые технологии:
 
@@ -10,16 +10,16 @@
 
 * Maven
 
+* TomCat
+
 * Liquibase
 
 ### 1. Запуск приложения с maven.
-Перейдите в корень проекта через командную строку и выполните команды:
+Запуск TomCat. Скачайте war файл https://github.com/Arcady555/MonitoringService/blob/homework_%233/target/MonitoringService-1.0-SNAPSHOT.war
+Вставьте его в папку в Тomcat  в папку /apache-tomcat-8.5.98/webapps . Переименуйте war файл в Mo.war
 
-```
-mvn clean install
-``` 
-
-![image](images/1.png)
+Зайдите в браузере на страницу http://localhost:7070/Mo/start (номер порта localhost зависит от натсроек Вашего TomCat!)
+![image](images/2.png)
 
 # Описание
 Показания можно подавать один раз в месяц.
