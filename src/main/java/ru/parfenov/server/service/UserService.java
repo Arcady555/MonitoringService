@@ -1,5 +1,6 @@
 package ru.parfenov.server.service;
 
+import ru.parfenov.server.dto.UserDto;
 import ru.parfenov.server.model.User;
 
 import java.util.List;
@@ -9,7 +10,7 @@ public interface UserService {
 
     String enter(String login);
 
-    List<User> viewAllUsers();
+    List<UserDto> viewAllUsers();
 
     String viewUserHistory(String login);
 

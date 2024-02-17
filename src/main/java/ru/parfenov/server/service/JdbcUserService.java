@@ -1,5 +1,8 @@
 package ru.parfenov.server.service;
 
+import ru.parfenov.server.dto.UserDto;
+import ru.parfenov.server.dto.UserToDtoMapper;
+import ru.parfenov.server.dto.UserToDtoMapperImpl;
 import ru.parfenov.server.model.User;
 import ru.parfenov.server.store.SqlUserStore;
 import ru.parfenov.server.store.UserStore;
@@ -44,16 +47,21 @@ public class JdbcUserService implements UserService {
     }
 
     @Override
-    public List<User> viewAllUsers() {
-        List<User> list = new ArrayList<>();
+    public List<UserDto> viewAllUsers() {
+        UserToDtoMapper userToDtoMapper = new UserToDtoMapperImpl();
+        List<UserDto> listDto = new ArrayList<>();
         try {
             UserStore userStore = new SqlUserStore();
-            list = userStore.getAll();
+            List<User> list = userStore.getAll();
+            for (User user : list) {
+                UserDto userDto = userToDtoMapper.toUserDto(user);
+                listDto.add(userDto);
+            }
             userStore.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return list;
+        return listDto;
     }
 
     @Override

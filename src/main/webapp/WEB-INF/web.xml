@@ -146,4 +146,94 @@
         <url-pattern>/logout</url-pattern>
     </servlet-mapping>
 
+
+
+    <servlet>
+        <servlet-name>servletName101</servlet-name>
+        <servlet-class>ru.parfenov.server.servlets.rest.reg.RestRegServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>servletName110</servlet-name>
+        <servlet-class>ru.parfenov.server.servlets.rest.login.admin.RestAllUserServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>servletName111</servlet-name>
+        <servlet-class>ru.parfenov.server.servlets.rest.login.admin.RestHistoryOfDataOfUserServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>servletName112</servlet-name>
+        <servlet-class>ru.parfenov.server.servlets.rest.login.admin.RestLastDataOfUserServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>servletName113</servlet-name>
+        <servlet-class>ru.parfenov.server.servlets.rest.login.admin.RestSpecMonthOfUserServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>servletName114</servlet-name>
+        <servlet-class>ru.parfenov.server.servlets.rest.login.admin.RestUserHistoryServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>servletName120</servlet-name>
+        <servlet-class>ru.parfenov.server.servlets.rest.login.client.RestDataHistoryServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>servletName121</servlet-name>
+        <servlet-class>ru.parfenov.server.servlets.rest.login.client.RestLastDataServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>servletName122</servlet-name>
+        <servlet-class>ru.parfenov.server.servlets.rest.login.client.RestSpecMonthServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>servletName123</servlet-name>
+        <servlet-class>ru.parfenov.server.servlets.rest.login.client.RestSubmitDataServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>servletName101</servlet-name>
+        <url-pattern>/rest_reg</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet-mapping>
+        <servlet-name>servletName110</servlet-name>
+        <url-pattern>/rest_all-users</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>servletName111</servlet-name>
+        <url-pattern>/rest_history-data-user</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>servletName112</servlet-name>
+        <url-pattern>/rest_last-data-of-user</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>servletName113</servlet-name>
+        <url-pattern>/rest_spec-month-user</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>servletName114</servlet-name>
+        <url-pattern>/rest_view-user-history</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet-mapping>
+        <servlet-name>servletName120</servlet-name>
+        <url-pattern>/rest_data-history</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>servletName121</servlet-name>
+        <url-pattern>/rest_last-data</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>servletName122</servlet-name>
+        <url-pattern>/rest_spec-month</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>servletName123</servlet-name>
+        <url-pattern>/rest_submit-data</url-pattern>
+    </servlet-mapping>
+
 </web-app>

@@ -4,6 +4,9 @@ import org.junit.jupiter.api.*;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import ru.parfenov.server.dto.UserDto;
+import ru.parfenov.server.dto.UserToDtoMapper;
+import ru.parfenov.server.dto.UserToDtoMapperImpl;
 import ru.parfenov.server.model.User;
 import ru.parfenov.server.store.SqlUserStore;
 import ru.parfenov.server.store.UserStore;
@@ -142,16 +145,20 @@ class JdbcUserServiceTest {
         }
 
         @Override
-        public List<User> viewAllUsers() { //////////////////////////////////////
-            List<User> list = new ArrayList<>();
+        public List<UserDto> viewAllUsers() {
+            UserToDtoMapper userToDtoMapper = new UserToDtoMapperImpl();
+            List<UserDto> listDto = new ArrayList<>();
             try {
-                UserStore userStore = new SqlUserStore();
-                list = userStore.getAll();
+                List<User> list = userStoreForTest.getAll();
+                for (User user : list) {
+                    UserDto userDto = userToDtoMapper.toUserDto(user);
+                    listDto.add(userDto);
+                }
                 userStoreForTest.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return list;
+            return listDto;
         }
 
         @Override

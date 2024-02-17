@@ -1,6 +1,7 @@
 package ru.parfenov.server.servlets.start.login.admin.adminmethods;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ru.parfenov.server.dto.UserDto;
 import ru.parfenov.server.model.User;
 import ru.parfenov.server.service.JdbcUserService;
 import ru.parfenov.server.service.UserService;
@@ -22,7 +23,8 @@ public class GetAllUserServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
             ServletException {
         ObjectMapper objectMapper = new ObjectMapper();
-        List<User> list = userService.viewAllUsers();
+
+        List<UserDto> list = userService.viewAllUsers();
         String obElement = objectMapper.writeValueAsString(list);
         PrintWriter out = response.getWriter();
         response.setContentType("application/json");
