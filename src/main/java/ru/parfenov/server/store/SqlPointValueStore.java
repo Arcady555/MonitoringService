@@ -1,5 +1,7 @@
 package ru.parfenov.server.store;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.parfenov.server.model.PointValue;
 import ru.parfenov.server.model.User;
 
@@ -12,6 +14,7 @@ import java.util.Optional;
 import static ru.parfenov.server.utility.ConnectionUtility.loadConnection;
 
 public class SqlPointValueStore implements PointValueStore {
+    private static final Logger LOG = LoggerFactory.getLogger(SqlPointValueStore.class.getName());
     private final Connection connection;
 
     public SqlPointValueStore() throws SQLException, ClassNotFoundException {
@@ -42,7 +45,7 @@ public class SqlPointValueStore implements PointValueStore {
             statement.setInt(4, pointValue.getValue());
             statement.execute();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Exception:", e);
         }
     }
 
@@ -65,7 +68,7 @@ public class SqlPointValueStore implements PointValueStore {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Exception:", e);
         }
         return points.size() != 0 ? Optional.of(points) : Optional.empty();
     }
@@ -93,7 +96,7 @@ public class SqlPointValueStore implements PointValueStore {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Exception:", e);
         }
         return points.size() != 0 ? Optional.of(points) : Optional.empty();
     }

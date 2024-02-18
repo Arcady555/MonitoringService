@@ -1,5 +1,7 @@
 package ru.parfenov.server.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.parfenov.server.dto.UserDto;
 import ru.parfenov.server.dto.UserToDtoMapper;
 import ru.parfenov.server.dto.UserToDtoMapperImpl;
@@ -16,6 +18,7 @@ import java.util.Optional;
 import static ru.parfenov.server.utility.Utility.fixTime;
 
 public class JdbcUserService implements UserService {
+    private static final Logger LOG = LoggerFactory.getLogger(JdbcUserService.class.getName());
 
     @Override
     public void reg(String login, String password) {
@@ -30,7 +33,7 @@ public class JdbcUserService implements UserService {
             userStore.create(user);
             userStore.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Exception:", e);
         }
     }
 
@@ -41,7 +44,7 @@ public class JdbcUserService implements UserService {
             fixTime(userStore, login, "enter");
             userStore.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Exception:", e);
         }
         return login;
     }
@@ -59,7 +62,7 @@ public class JdbcUserService implements UserService {
             }
             userStore.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Exception:", e);
         }
         return listDto;
     }
@@ -78,7 +81,7 @@ public class JdbcUserService implements UserService {
             }
             userStore.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Exception:", e);
         }
         return result;
     }
@@ -92,7 +95,7 @@ public class JdbcUserService implements UserService {
             user = userOptional.orElse(null);
             userStore.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Exception:", e);
         }
         return user;
     }

@@ -1,5 +1,7 @@
 package ru.parfenov.server.store;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.parfenov.server.model.User;
 
 import java.sql.Connection;
@@ -13,6 +15,7 @@ import java.util.Optional;
 import static ru.parfenov.server.utility.ConnectionUtility.loadConnection;
 
 public class SqlUserStore implements UserStore {
+    private static final Logger LOG = LoggerFactory.getLogger(SqlUserStore.class.getName());
     private final Connection connection;
 
     public SqlUserStore() throws SQLException, ClassNotFoundException {
@@ -43,7 +46,7 @@ public class SqlUserStore implements UserStore {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Exception:", e);
         }
         return users;
     }
@@ -59,7 +62,7 @@ public class SqlUserStore implements UserStore {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Exception:", e);
         }
         return user;
     }
@@ -75,7 +78,7 @@ public class SqlUserStore implements UserStore {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Exception:", e);
         }
         return user;
     }
@@ -90,7 +93,7 @@ public class SqlUserStore implements UserStore {
             statement.setString(3, user.getHistory());
             statement.execute();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Exception:", e);
         }
     }
 
@@ -103,7 +106,7 @@ public class SqlUserStore implements UserStore {
             statement.setInt(2, user.getId());
             statement.execute();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Exception:", e);
         }
     }
 
