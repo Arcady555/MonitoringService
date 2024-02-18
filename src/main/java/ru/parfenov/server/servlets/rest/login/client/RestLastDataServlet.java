@@ -20,7 +20,6 @@ import static ru.parfenov.server.utility.Utility.*;
 @WebServlet(name = "RestLastDataServlet", urlPatterns = "/rest_last-data")
 public class RestLastDataServlet extends HttpServlet {
     private final PointValueService pointValueService = new JdbcPointValueService();
-    private final UserService userService = new JdbcUserService();
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
@@ -28,7 +27,6 @@ public class RestLastDataServlet extends HttpServlet {
         String login = getUserLogin(request);
         PrintWriter out = response.getWriter();
         if (validationEnter(request, response, login, out)) {
-            // response.setContentType("text/html");
             List<PointValue> list = pointValueService.viewLastData(login);
             printOut(list, response);
         }
