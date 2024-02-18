@@ -1,11 +1,10 @@
 package ru.parfenov;
 
-import ru.parfenov.client.ClientInterface;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class Main {
-    public static void main(String[] args) throws Exception {
-        System.out.println("HELLO!!!" + System.lineSeparator() + "Welcome!");
-        ClientInterface clientInterface = new ClientInterface();
-        clientInterface.run();
+    public static void main(String[] args) {
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext("lifecycle");
+        context.close();
     }
 }

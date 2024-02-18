@@ -2,7 +2,7 @@
 
 ## Welcome!
 
-Работа в консоли. С сохранением данных в БД
+WEB приложение. С сохранением данных в БД
 
 ## Используемые технологии:
 
@@ -10,16 +10,46 @@
 
 * Maven
 
+* TomCat
+
 * Liquibase
 
-### 1. Запуск приложения с maven.
-Перейдите в корень проекта через командную строку и выполните команды:
+### 1. Запуск приложения.
+Запустите TomCat. Скачайте war файл https://github.com/Arcady555/MonitoringService/blob/homework_%233/target/MonitoringService-1.0-SNAPSHOT.war
+Вставьте его в Тomcat  в папку /apache-tomcat-8.5.98/webapps . Переименуйте war файл в Mo.war
 
-```
-mvn clean install
-``` 
+1й вариант работы с приложением - через страницы в браузере
+Зайдите в браузере на страницу http://localhost:7070/Mo/start (номер порта localhost зависит от натсроек Вашего TomCat!)
+![image](images/2.png)
+И далее кликайте по ссылкам
 
-![image](images/1.png)
+2й вариант - через отправку HTTP- запросов, например через PostMan
+* Зарегистрируйтесь (http://localhost:7070/Mo/rest_reg):
+  ![image](images/3.png)
+* Далее запросы отправлять с авторизацией:
+  ![image](images/4.png)
+* Отправить данные(http://localhost:7070/Mo/rest_submit-data):
+  ![image](images/5.png)
+* Посмотреть свои данные за конкретный месяц(http://localhost:7070/Mo/rest_spec-month):
+  ![image](images/6.png)
+* Посмотреть свои последние данные (http://localhost:7070/Mo/rest_last-data):
+  ![image](images/7.png)
+* Посмотреть все свои данные (http://localhost:7070/Mo/rest_data-history):
+  ![image](images/8.png)
+
+Следующие запросы доступны только админу
+* Посмотреть список всех пользователей(http://localhost:7070/Mo/rest_all-users):
+  ![image](images/9.png)
+* Посмотреть все данные выбранного пользователя (http://localhost:7070/Mo/rest_history-data-user):
+  ![image](images/10.png)
+* Посмотреть последние данные выбранного пользователя (http://localhost:7070/rest_last-data-of-user):
+  ![image](images/11.png)
+* Посмотреть данные выбранного пользователя за конкретный месяц (http://localhost:7070/Mo/rest_spec-month-user):
+  ![image](images/12.png)
+* Посмотреть мониторинг выбранного пользователя (http://localhost:7070/Mo/rest_view-user-history"):
+  ![image](images/13.png)
+
+
 
 # Описание
 Показания можно подавать один раз в месяц.
@@ -31,7 +61,6 @@ mvn clean install
 # Возможности
 - предусмотрено расширение перечня подаваемых показаний
 - данные хранятся в памяти приложения
-- приложение консольное
 - есть регистрация пользователя
 - есть авторизация пользователя
 - получение актуальных показаний счетчиков

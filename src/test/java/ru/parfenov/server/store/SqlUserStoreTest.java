@@ -59,16 +59,16 @@ class SqlUserStoreTest {
 
     @Test
     void whenCreateAndGetByLoginThanOk() {
-        Assertions.assertEquals(userStore.getByLogin("Arcady").getPassword(), "password");
-        Assertions.assertEquals(userStore.getByLogin("Arcady").getHistory(), "history");
+        Assertions.assertEquals(userStore.getByLogin("Arcady").get().getPassword(), "password");
+        Assertions.assertEquals(userStore.getByLogin("Arcady").get().getHistory(), "history");
 
     }
 
     @Test
     void whenCreateAndFindByIdThanOk() {
-        int id = userStore.getByLogin("Arcady").getId();
-        Assertions.assertEquals(userStore.findById(id).getLogin(), "Arcady");
-        Assertions.assertEquals(userStore.findById(id).getPassword(), "password");
-        Assertions.assertEquals(userStore.findById(id).getHistory(), "history");
+        int id = userStore.getByLogin("Arcady").get().getId();
+        Assertions.assertEquals(userStore.findById(id).get().getLogin(), "Arcady");
+        Assertions.assertEquals(userStore.findById(id).get().getPassword(), "password");
+        Assertions.assertEquals(userStore.findById(id).get().getHistory(), "history");
     }
 }
