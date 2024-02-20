@@ -2,6 +2,8 @@ package ru.parfenov.server.store;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import ru.parfenov.server.model.PointValue;
 import ru.parfenov.server.model.User;
 
@@ -13,10 +15,12 @@ import java.util.Optional;
 
 import static ru.parfenov.server.utility.ConnectionUtility.loadConnection;
 
+@Repository
 public class SqlPointValueStore implements PointValueStore {
     private static final Logger LOG = LoggerFactory.getLogger(SqlPointValueStore.class.getName());
     private final Connection connection;
 
+    @Autowired
     public SqlPointValueStore() throws SQLException, ClassNotFoundException {
         connection = loadConnection(SqlPointValueStore
                 .class.getClassLoader()

@@ -1,13 +1,16 @@
 package ru.parfenov.server.service;
 
+import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import ru.parfenov.server.dto.PointValueDto;
 import ru.parfenov.server.model.PointValue;
 import ru.parfenov.server.model.User;
 import ru.parfenov.server.store.PointValueStore;
-import ru.parfenov.server.store.SqlPointValueStore;
-import ru.parfenov.server.store.SqlUserStore;
 import ru.parfenov.server.store.UserStore;
+import ru.parfenov.server.utility.Utility;
 
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -16,15 +19,23 @@ import java.util.List;
 import java.util.Optional;
 
 import static ru.parfenov.server.utility.Utility.fixTime;
+import static ru.parfenov.server.utility.Utility.getListDto;
 
+@Service
 public class JdbcPointValueService implements PointValueService {
     private static final Logger LOG = LoggerFactory.getLogger(JdbcPointValueService.class.getName());
+    private final UserStore userStore;
+    private final PointValueStore pointValueStore;
+
+    @Autowired
+    public JdbcPointValueService(UserStore userStore, PointValueStore pointValueStore) {
+        this.userStore = userStore;
+        this.pointValueStore = pointValueStore;
+    }
 
     @Override
     public void submitData(String login, List<PointValue> list) {
         try {
-            UserStore userStore = new SqlUserStore();
-            PointValueStore pointValueStore = new SqlPointValueStore();
             Optional<User> userOptional = userStore.getByLogin(login);
             int userId = userOptional.map(User::getId).orElse(-1);
             if (userId != -1) {
@@ -46,11 +57,9 @@ public class JdbcPointValueService implements PointValueService {
     }
 
     @Override
-    public List<PointValue> viewLastData(String login) {
-        List<PointValue> listResult = null;
+    public List<PointValueDto> viewLastData(String login) {
+        List<PointValueDto> listResult = null;
         try {
-            UserStore userStore = new SqlUserStore();
-            PointValueStore pointValueStore = new SqlPointValueStore();
             Optional<User> userOptional = userStore.getByLogin(login);
             int userId = userOptional.map(User::getId).orElse(-1);
             if (userId != -1) {
@@ -58,8 +67,9 @@ public class JdbcPointValueService implements PointValueService {
                 if (data.isEmpty()) {
                     System.out.println("No data!!!" + System.lineSeparator());
                 } else {
-                    listResult = data.get();
-                    printDataFromDataStore(listResult);
+                    List<PointValue> list = data.get();
+                    listResult = Utility.getListDto(list);
+             //       printDataFromDataStore(list);
                 }
                 fixTime(userStore, login, "view last data");
             } else {
@@ -74,11 +84,9 @@ public class JdbcPointValueService implements PointValueService {
     }
 
     @Override
-    public List<PointValue> viewDataForSpecMonth(String login, int month, int year) {
-        List<PointValue> listResult = null;
+    public List<PointValueDto> viewDataForSpecMonth(String login, int month, int year) {
+        List<PointValueDto> listResult = null;
         try {
-            UserStore userStore = new SqlUserStore();
-            PointValueStore pointValueStore = new SqlPointValueStore();
             String dateString;
             if (month < 10) {
                 dateString = year + "-0" + month + "-01T01:01:01";
@@ -92,8 +100,9 @@ public class JdbcPointValueService implements PointValueService {
                 if (data.isEmpty()) {
                     System.out.println("No data!!!" + System.lineSeparator());
                 } else {
-                    listResult = data.get();
-                    printDataFromDataStore(listResult);
+                    List<PointValue> list = data.get();
+                    listResult = getListDto(list);
+               //     printDataFromDataStore(list);
                     System.out.println(System.lineSeparator());
 
                 }
@@ -110,17 +119,16 @@ public class JdbcPointValueService implements PointValueService {
     }
 
     @Override
-    public List<PointValue> viewDataHistory(String login) {
-        List<PointValue> listResult = null;
+    public List<PointValueDto> viewDataHistory(String login) {
+        List<PointValueDto> listResult = null;
         try {
-            UserStore userStore = new SqlUserStore();
-            PointValueStore pointValueStore = new SqlPointValueStore();
             Optional<User> userOptional = userStore.getByLogin(login);
             if (userOptional.isPresent()) {
                 Optional<List<PointValue>> dataListOptional = pointValueStore.findByUser(userOptional.get());
                 if (dataListOptional.isPresent()) {
-                    listResult = dataListOptional.get();
-                    printDataFromDataStore(listResult);
+                    List<PointValue> list = dataListOptional.get();
+                    listResult = getListDto(list);
+                  //  printDataFromDataStore(list);
                 } else {
                     System.out.println("No data!!!" + System.lineSeparator());
                 }
@@ -139,7 +147,6 @@ public class JdbcPointValueService implements PointValueService {
     @Override
     public void toOut(String login) {
         try {
-            UserStore userStore = new SqlUserStore();
             fixTime(userStore, login, "out");
             userStore.close();
         } catch (Exception e) {
@@ -157,12 +164,10 @@ public class JdbcPointValueService implements PointValueService {
      * @param login
      * @return
      */
-    @Override
-    public boolean validationOnceInMonth(String login) {
+
+    private boolean validationOnceInMonth(String login) {
         boolean rsl = false;
         try {
-            UserStore userStore = new SqlUserStore();
-            PointValueStore pointValueStore = new SqlPointValueStore();
             Optional<User> userOptional = userStore.getByLogin(login);
             if (userOptional.isPresent()) {
                 Optional<List<PointValue>> data = pointValueStore.getLastData(userOptional.get().getId());
@@ -190,7 +195,6 @@ public class JdbcPointValueService implements PointValueService {
      * @param data
      */
     private void printDataFromDataStore(List<PointValue> data) throws Exception {
-        UserStore userStore = new SqlUserStore();
         PointValue firstPoint = data.get(0);
         Optional<User> userOptional = userStore.findById(firstPoint.getUserId());
         if (userOptional.isPresent()) {

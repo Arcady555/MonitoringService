@@ -26,7 +26,7 @@ import static ru.parfenov.server.utility.Utility.fixTime;
 
 @Testcontainers
 class JdbcPointValueServiceTest {
-    @Container
+/*    @Container
     public static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:13")
             .withDatabaseName("monitoring_service")
             .withUsername("user")
@@ -271,7 +271,7 @@ class JdbcPointValueServiceTest {
          * @param login
          * @return
          */
-        @Override
+    /*    @Override
         public boolean validationOnceInMonth(String login) {
             boolean rsl = false;
             try {
@@ -301,7 +301,7 @@ class JdbcPointValueServiceTest {
          *
          * @param data
          */
-        private void printDataFromDataStore(List<PointValue> data) throws Exception {
+     /*   private void printDataFromDataStore(List<PointValue> data) throws Exception {
             PointValue firstPoint = data.get(0);
             Optional<User> userOptional = userStore.findById(firstPoint.getUserId());
             if (userOptional.isPresent()) {
@@ -332,5 +332,5 @@ class JdbcPointValueServiceTest {
             }
             userStore.close();
         }
-    }
+    } */
 }

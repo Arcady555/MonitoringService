@@ -2,6 +2,8 @@ package ru.parfenov.server.store;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import ru.parfenov.server.model.User;
 
 import java.sql.Connection;
@@ -14,10 +16,13 @@ import java.util.Optional;
 
 import static ru.parfenov.server.utility.ConnectionUtility.loadConnection;
 
+@Repository
 public class SqlUserStore implements UserStore {
     private static final Logger LOG = LoggerFactory.getLogger(SqlUserStore.class.getName());
+
     private final Connection connection;
 
+    @Autowired
     public SqlUserStore() throws SQLException, ClassNotFoundException {
         connection = loadConnection(SqlUserStore
                 .class.getClassLoader()

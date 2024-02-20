@@ -9,8 +9,8 @@ import ru.parfenov.server.model.User;
 import ru.parfenov.server.service.JdbcUserService;
 import ru.parfenov.server.store.UserStore;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+//import javax.servlet.http.HttpServletRequest;
+//import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
@@ -40,15 +40,15 @@ public class Utility {
         userStore.insertUserHistory(user, newHistory);
     }
 
-    public static void printOut(List<PointValue> list, HttpServletResponse response) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
+    public static void printOut(List<PointValue> list) { // }, HttpServletResponse response) throws IOException {
+      /*  ObjectMapper objectMapper = new ObjectMapper();
         PrintWriter out = response.getWriter();
         List<PointValueDto> listDto = getListDto(list);
         String obElement = objectMapper.writeValueAsString(listDto);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         out.print(obElement);
-        out.flush();
+        out.flush(); */
     }
 
     public static List<PointValueDto> getListDto(List<PointValue> list) {
@@ -72,7 +72,7 @@ public class Utility {
         return list;
     }
 
-    public static boolean validationAdmin(HttpServletResponse response, String login, PrintWriter out) {
+  /*  public static boolean validationAdmin(HttpServletResponse response, String login, PrintWriter out) {
         if (login.equals("admin")) {
             return true;
         }
@@ -80,13 +80,13 @@ public class Utility {
         out.print("Not permission!");
         out.flush();
         return false;
-    }
+    } */
 
-    public static boolean validationEnter(HttpServletRequest request,
+  /*  public static boolean validationEnter(HttpServletRequest request,
                                           HttpServletResponse response,
                                           String login,
                                           PrintWriter out) {
-        JdbcUserService jdbcUserService = new JdbcUserService();
+       // JdbcUserService jdbcUserService = new JdbcUserService();
         String password = getUserPassword(request);
         if (jdbcUserService.getByLogin(login) != null
                 && password.equals(jdbcUserService.getByLogin(login).getPassword())) {
@@ -96,9 +96,9 @@ public class Utility {
         out.print("Login and password not correct!");
         out.flush();
         return false;
-    }
+    } */
 
-    public static String getUserLogin(HttpServletRequest request) {
+ /*   public static String getUserLogin(HttpServletRequest request) {
         String loginAndPassword = getLoginAndPassword(request);
         return loginAndPassword != null ? loginAndPassword.split(" ")[0] : "";
     }
@@ -106,9 +106,9 @@ public class Utility {
     public static String getUserPassword(HttpServletRequest request) {
         String loginAndPassword = getLoginAndPassword(request);
         return loginAndPassword != null ? loginAndPassword.split(" ")[1] : "";
-    }
+    } */
 
-    private static String getLoginAndPassword(HttpServletRequest request) {
+  /*  private static String getLoginAndPassword(HttpServletRequest request) {
         String authHeader = request.getHeader("Authorization");
         if (authHeader != null) {
             StringTokenizer st = new StringTokenizer(authHeader);
@@ -131,5 +131,5 @@ public class Utility {
             }
         }
         return null;
-    }
+    } */
 }

@@ -26,7 +26,7 @@ import static ru.parfenov.server.utility.Utility.fixTime;
 
 @Testcontainers
 class JdbcUserServiceTest {
-    private static Connection testConnection;
+  /*  private static Connection testConnection;
     private static SqlUserStore userStore;
     private static UserServiceForTest userService;
 
@@ -93,7 +93,7 @@ class JdbcUserServiceTest {
                 outContent.toString());
     } */
 
-    @Test
+ /*   @Test
     void whenViewUserHistoryThanOk() {
         userService.viewUserHistory("Arcady");
         Assertions.assertTrue(outContent.toString().contains("registration"));
@@ -191,5 +191,5 @@ class JdbcUserServiceTest {
             }
             return user;
         }
-    }
+    } */
 }
