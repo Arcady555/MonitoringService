@@ -1,34 +1,44 @@
 package ru.parfenov.server.store;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.parfenov.server.model.User;
 
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import static ru.parfenov.server.utility.Utility.loadConnection;
+import static ru.parfenov.server.utility.ConnectionUtility.loadConnection;
 
 public class SqlUserStore implements UserStore {
+    private static final Logger LOG = LoggerFactory.getLogger(SqlUserStore.class.getName());
     private final Connection connection;
 
-    public SqlUserStore() throws Exception {
-        InputStream in = SqlUserStore.class.getClassLoader()
-                .getResourceAsStream("db/liquibase.properties");
-        this.connection = loadConnection(in);
+    public SqlUserStore() throws SQLException, ClassNotFoundException {
+        connection = loadConnection(SqlUserStore
+                .class.getClassLoader()
+                .getResourceAsStream("db/liquibase.properties"));
     }
 
-    public SqlUserStore(Connection connection) throws Exception {
+    public SqlUserStore(Connection connection) {
         this.connection = connection;
+    }
+
+    @Override
+    public void close() throws Exception {
+        if (connection != null) {
+            connection.close();
+        }
     }
 
     @Override
     public List<User> getAll() {
         List<User> users = new ArrayList<>();
-        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM users")) {
+        try (PreparedStatement statement = connection.prepareStatement("SELECT id, login, password, history FROM users")) {
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     User user = returnUser(resultSet);
@@ -36,39 +46,39 @@ public class SqlUserStore implements UserStore {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Exception:", e);
         }
         return users;
     }
 
     @Override
-    public User findById(int userId) {
-        User user = null;
-        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE id = ?")) {
+    public Optional<User> findById(int userId) {
+        Optional<User> user = Optional.empty();
+        try (PreparedStatement statement = connection.prepareStatement("SELECT id, login, password, history FROM users WHERE id = ?")) {
             statement.setInt(1, userId);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    user = returnUser(resultSet);
+                    user = Optional.of(returnUser(resultSet));
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Exception:", e);
         }
         return user;
     }
 
     @Override
-    public User getByLogin(String login) {
-        User user = null;
-        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE login = ?")) {
+    public Optional<User> getByLogin(String login) {
+        Optional<User> user = Optional.empty();
+        try (PreparedStatement statement = connection.prepareStatement("SELECT id, login, password, history FROM users WHERE login = ?")) {
             statement.setString(1, login);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    user = returnUser(resultSet);
+                    user = Optional.of(returnUser(resultSet));
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Exception:", e);
         }
         return user;
     }
@@ -83,7 +93,7 @@ public class SqlUserStore implements UserStore {
             statement.setString(3, user.getHistory());
             statement.execute();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Exception:", e);
         }
     }
 
@@ -96,7 +106,7 @@ public class SqlUserStore implements UserStore {
             statement.setInt(2, user.getId());
             statement.execute();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Exception:", e);
         }
     }
 

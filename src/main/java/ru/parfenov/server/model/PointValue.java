@@ -3,11 +3,14 @@ package ru.parfenov.server.model;
 import java.time.LocalDateTime;
 
 public class PointValue {
-    private long id;
-    private int userId;
+    private Long id;
+    private Integer userId;
     private LocalDateTime date;
     private String point;
-    private int value;
+    private Integer value;
+
+    public PointValue() {
+    }
 
     public PointValue(String point, int value) {
         this.point = point;

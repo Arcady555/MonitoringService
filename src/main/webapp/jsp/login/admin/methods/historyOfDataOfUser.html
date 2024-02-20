@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <title>История данных пользователя</title>
+</head>
+<body>
+<h3>История данных пользователя</h3>
+
+<div class="container py-3">
+    <main class="form-signin">
+        <h1 class="h3 mb-3 fw-normal">Введите логин пользователя</h1>
+        <div class="alert alert-danger" role="alert" th:if="${not #lists.isEmpty(errorMessage)}">
+            <span th:text="${errorMessage}"></span>
+        </div>
+        <!--  Mo -->
+        <form method="post" th:action="@{/Mo/history-data-user}">
+
+            <div class="form-floating mb-3">
+                <input class="form-control" id="user_login" name="user_login" type="text">
+                <label for="user_login">Login</label>
+            </div>
+            <hr class="my-4">
+            <hr class="my-4">
+            <button class="w-100 btn btn-lg btn-primary" type="submit">Показать историю</button>
+        </form>
+    </main>
+</div>
+</body>
+</html>

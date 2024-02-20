@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <title>Отправка данных счётчиков</title>
+</head>
+<body>
+<h3>Отправка данных счётчиков</h3>
+
+<div class="container py-3">
+    <main class="form-signin">
+        <h1 class="h3 mb-3 fw-normal">Заполните:</h1>
+        <div class="alert alert-danger" role="alert" th:if="${not #lists.isEmpty(errorMessage)}">
+            <span th:text="${errorMessage}"></span>
+        </div>
+        <!--  Mo -->
+        <form method="post" th:action="@{/Mo/submitData}">
+
+            <div class="form-floating mb-3">
+                <input class="form-control" id="heating" name="heating" type="text">
+                <label for="heating">Heating</label>
+            </div>
+            <div class="form-floating">
+                <input class="form-control" id="coolWater" name="coolWater" type="text">
+                <label for="coolWater">Cool water</label>
+            </div>
+            <div class="form-floating">
+                <input class="form-control" id="hotWater" name="hotWater" type="text">
+                <label for="hotWater">Cool water</label>
+            </div>
+            <hr class="my-4">
+            <button class="w-100 btn btn-lg btn-primary" type="submit">Отправить</button>
+        </form>
+    </main>
+</div>
+</body>
+</html>
