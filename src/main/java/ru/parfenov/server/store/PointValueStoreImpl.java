@@ -13,17 +13,17 @@ import java.util.Optional;
 
 import static ru.parfenov.server.utility.ConnectionUtility.loadConnection;
 
-public class SqlPointValueStore implements PointValueStore {
-    private static final Logger LOG = LoggerFactory.getLogger(SqlPointValueStore.class.getName());
+public class PointValueStoreImpl implements PointValueStore {
+    private static final Logger LOG = LoggerFactory.getLogger(PointValueStoreImpl.class.getName());
     private final Connection connection;
 
-    public SqlPointValueStore() throws SQLException, ClassNotFoundException {
-        connection = loadConnection(SqlPointValueStore
+    public PointValueStoreImpl() throws SQLException, ClassNotFoundException {
+        connection = loadConnection(PointValueStoreImpl
                 .class.getClassLoader()
                 .getResourceAsStream("db/liquibase.properties"));
     }
 
-    public SqlPointValueStore(Connection connection) {
+    public PointValueStoreImpl(Connection connection) {
         this.connection = connection;
     }
 

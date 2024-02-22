@@ -2,7 +2,7 @@ package ru.parfenov.server.servlets.rest.login.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.parfenov.server.model.PointValue;
-import ru.parfenov.server.service.JdbcPointValueService;
+import ru.parfenov.server.service.PointValueServiceImpl;
 import ru.parfenov.server.service.PointValueService;
 import ru.parfenov.server.servlets.rest.jacksonmodel.MonthYear;
 
@@ -19,7 +19,7 @@ import static ru.parfenov.server.utility.Utility.*;
 
 @WebServlet(name = "RestSpecMonthServlet", urlPatterns = "/rest_spec-month")
 public class RestSpecMonthServlet extends HttpServlet {
-    private final PointValueService pointValueService = new JdbcPointValueService();
+    private final PointValueService pointValueService = new PointValueServiceImpl();
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {

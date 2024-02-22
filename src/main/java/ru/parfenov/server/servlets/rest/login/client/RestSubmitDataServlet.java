@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.parfenov.server.dto.PointValueDto;
 import ru.parfenov.server.model.PointValue;
-import ru.parfenov.server.service.JdbcPointValueService;
-import ru.parfenov.server.service.JdbcUserService;
+import ru.parfenov.server.service.PointValueServiceImpl;
+import ru.parfenov.server.service.UserServiceImpl;
 import ru.parfenov.server.service.PointValueService;
 import ru.parfenov.server.service.UserService;
 
@@ -22,8 +22,8 @@ import static ru.parfenov.server.utility.Utility.*;
 
 @WebServlet(name = "RestSubmitDataServlet", urlPatterns = "/rest_submit-data")
 public class RestSubmitDataServlet extends HttpServlet {
-    private final PointValueService pointValueService = new JdbcPointValueService();
-    private final UserService userService = new JdbcUserService();
+    private final PointValueService pointValueService = new PointValueServiceImpl();
+    private final UserService userService = new UserServiceImpl();
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {

@@ -8,8 +8,7 @@ import ru.parfenov.server.dto.UserDto;
 import ru.parfenov.server.dto.UserToDtoMapper;
 import ru.parfenov.server.dto.UserToDtoMapperImpl;
 import ru.parfenov.server.model.User;
-import ru.parfenov.server.store.SqlUserStore;
-import ru.parfenov.server.store.UserStore;
+import ru.parfenov.server.store.UserStoreImpl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -25,10 +24,10 @@ import java.util.Optional;
 import static ru.parfenov.server.utility.Utility.fixTime;
 
 @Testcontainers
-class JdbcUserServiceTest {
+class UserServiceImplTest {
     private static Connection testConnection;
-    private static SqlUserStore userStore;
-    private static UserServiceForTest userService;
+    private static UserStoreImpl userStore;
+    private static UserServiceForTestImpl userService;
 
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
@@ -57,8 +56,8 @@ class JdbcUserServiceTest {
                 postgreSQLContainer.getJdbcUrl(),
                 postgreSQLContainer.getUsername(),
                 postgreSQLContainer.getPassword());
-        userStore = new SqlUserStore(testConnection);
-        userService = new UserServiceForTest(userStore);
+        userStore = new UserStoreImpl(testConnection);
+        userService = new UserServiceForTestImpl(userStore);
         userService.reg("Arcady", "123");
     }
 
@@ -110,10 +109,10 @@ class JdbcUserServiceTest {
         Assertions.assertEquals("no user!", outContent.toString());
     }
 
-    private static class UserServiceForTest extends JdbcUserService {
-        private final SqlUserStore userStoreForTest;
+    private static class UserServiceForTestImpl extends UserServiceImpl {
+        private final UserStoreImpl userStoreForTest;
 
-        public UserServiceForTest(SqlUserStore userStoreForTest) {
+        public UserServiceForTestImpl(UserStoreImpl userStoreForTest) {
             this.userStoreForTest = userStoreForTest;
         }
 

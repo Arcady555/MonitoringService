@@ -1,10 +1,8 @@
 package ru.parfenov.server.servlets.rest.login.client;
 
 import ru.parfenov.server.model.PointValue;
-import ru.parfenov.server.service.JdbcPointValueService;
-import ru.parfenov.server.service.JdbcUserService;
+import ru.parfenov.server.service.PointValueServiceImpl;
 import ru.parfenov.server.service.PointValueService;
-import ru.parfenov.server.service.UserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,7 +17,7 @@ import static ru.parfenov.server.utility.Utility.*;
 
 @WebServlet(name = "RestLastDataServlet", urlPatterns = "/rest_last-data")
 public class RestLastDataServlet extends HttpServlet {
-    private final PointValueService pointValueService = new JdbcPointValueService();
+    private final PointValueService pointValueService = new PointValueServiceImpl();
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,

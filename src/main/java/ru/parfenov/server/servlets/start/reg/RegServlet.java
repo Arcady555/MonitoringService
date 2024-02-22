@@ -1,6 +1,6 @@
 package ru.parfenov.server.servlets.start.reg;
 
-import ru.parfenov.server.service.JdbcUserService;
+import ru.parfenov.server.service.UserServiceImpl;
 import ru.parfenov.server.service.UserService;
 
 import javax.servlet.ServletException;
@@ -12,7 +12,7 @@ import java.io.IOException;
 
 @WebServlet(name = "RegServlet", urlPatterns = "/registration")
 public class RegServlet extends HttpServlet {
-    private final UserService userService = new JdbcUserService();
+    private final UserService userService = new UserServiceImpl();
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,

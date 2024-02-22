@@ -1,7 +1,7 @@
 package ru.parfenov.server.servlets.start.login.client.clientmethods;
 
 import ru.parfenov.server.model.PointValue;
-import ru.parfenov.server.service.JdbcPointValueService;
+import ru.parfenov.server.service.PointValueServiceImpl;
 import ru.parfenov.server.service.PointValueService;
 
 import javax.servlet.ServletException;
@@ -16,7 +16,7 @@ import java.util.List;
 
 @WebServlet(name = "SubmitDataServlet", urlPatterns = "/submit-data")
 public class SubmitDataServlet extends HttpServlet {
-    private final PointValueService pointValueService = new JdbcPointValueService();
+    private final PointValueService pointValueService = new PointValueServiceImpl();
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,

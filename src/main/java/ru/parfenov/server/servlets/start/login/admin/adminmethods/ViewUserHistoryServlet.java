@@ -1,6 +1,6 @@
 package ru.parfenov.server.servlets.start.login.admin.adminmethods;
 
-import ru.parfenov.server.service.JdbcUserService;
+import ru.parfenov.server.service.UserServiceImpl;
 import ru.parfenov.server.service.UserService;
 
 import javax.servlet.ServletException;
@@ -13,7 +13,7 @@ import java.io.PrintWriter;
 
 @WebServlet(name = "ViewUserHistoryServlet", urlPatterns = "/view-user-history")
 public class ViewUserHistoryServlet extends HttpServlet {
-    private final UserService userService = new JdbcUserService();
+    private final UserService userService = new UserServiceImpl();
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,

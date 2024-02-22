@@ -1,7 +1,7 @@
 package ru.parfenov.server.servlets.rest.login.client;
 
 import ru.parfenov.server.model.PointValue;
-import ru.parfenov.server.service.JdbcPointValueService;
+import ru.parfenov.server.service.PointValueServiceImpl;
 import ru.parfenov.server.service.PointValueService;
 
 import javax.servlet.ServletException;
@@ -17,7 +17,7 @@ import static ru.parfenov.server.utility.Utility.*;
 
 @WebServlet(name = "RestDataHistoryServlet", urlPatterns = "/rest_data-history")
 public class RestDataHistoryServlet extends HttpServlet {
-    private final PointValueService pointValueService = new JdbcPointValueService();
+    private final PointValueService pointValueService = new PointValueServiceImpl();
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,

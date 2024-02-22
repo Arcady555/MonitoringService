@@ -6,9 +6,8 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import ru.parfenov.server.model.PointValue;
 import ru.parfenov.server.model.User;
-import ru.parfenov.server.store.PointValueStore;
-import ru.parfenov.server.store.SqlPointValueStore;
-import ru.parfenov.server.store.SqlUserStore;
+import ru.parfenov.server.store.PointValueStoreImpl;
+import ru.parfenov.server.store.UserStoreImpl;
 import ru.parfenov.server.store.UserStore;
 
 import java.io.ByteArrayOutputStream;
@@ -25,7 +24,7 @@ import java.util.Optional;
 import static ru.parfenov.server.utility.Utility.fixTime;
 
 @Testcontainers
-class JdbcPointValueServiceTest {
+class PointValueServiceImplTest {
     @Container
     public static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:13")
             .withDatabaseName("monitoring_service")
@@ -34,9 +33,9 @@ class JdbcPointValueServiceTest {
             .withInitScript("changelog/01_ddl_create_table_users_and_data.xml")
             .withInitScript("changelog/02_dml_insert_admin_into_users.xml");
     private static Connection testConnection;
-    private static SqlUserStore userStore;
-    private static SqlPointValueStore pointValueStore;
-    private static PointValueServiceForTest pointValueService;
+    private static UserStoreImpl userStore;
+    private static PointValueStoreImpl pointValueStore;
+    private static PointValueServiceForTestImpl pointValueService;
     private static User user;
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
@@ -57,9 +56,9 @@ class JdbcPointValueServiceTest {
                 postgreSQLContainer.getJdbcUrl(),
                 postgreSQLContainer.getUsername(),
                 postgreSQLContainer.getPassword());
-        userStore = new SqlUserStore(testConnection);
-        pointValueStore = new SqlPointValueStore(testConnection);
-        pointValueService = new PointValueServiceForTest(pointValueStore, userStore);
+        userStore = new UserStoreImpl(testConnection);
+        pointValueStore = new PointValueStoreImpl(testConnection);
+        pointValueService = new PointValueServiceForTestImpl(pointValueStore, userStore);
         user = new User(0, "Arcady", "123");
         userStore.create(user);
         List<PointValue> list = List.of(
@@ -133,11 +132,11 @@ class JdbcPointValueServiceTest {
                 outContent.toString());
     }
 
-    private static class PointValueServiceForTest extends JdbcPointValueService {
-        private final SqlPointValueStore pointValueStoreForTest;
-        private final SqlUserStore userStoreForTest;
+    private static class PointValueServiceForTestImpl extends PointValueServiceImpl {
+        private final PointValueStoreImpl pointValueStoreForTest;
+        private final UserStoreImpl userStoreForTest;
 
-        public PointValueServiceForTest(SqlPointValueStore pointValueStoreForTest, SqlUserStore userStoreForTest) {
+        public PointValueServiceForTestImpl(PointValueStoreImpl pointValueStoreForTest, UserStoreImpl userStoreForTest) {
             this.pointValueStoreForTest = pointValueStoreForTest;
             this.userStoreForTest = userStoreForTest;
         }
@@ -253,7 +252,7 @@ class JdbcPointValueServiceTest {
         @Override
         public void toOut(String login) {
             try {
-                UserStore userStore = new SqlUserStore();
+                UserStore userStore = new UserStoreImpl();
                 fixTime(userStore, login, "out");
                 userStore.close();
             } catch (Exception e) {

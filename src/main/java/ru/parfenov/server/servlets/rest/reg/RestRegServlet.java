@@ -2,7 +2,7 @@ package ru.parfenov.server.servlets.rest.reg;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.parfenov.server.model.User;
-import ru.parfenov.server.service.JdbcUserService;
+import ru.parfenov.server.service.UserServiceImpl;
 import ru.parfenov.server.service.UserService;
 
 import javax.servlet.annotation.WebServlet;
@@ -15,7 +15,7 @@ import java.util.Scanner;
 
 @WebServlet(name = "RestRegServlet", urlPatterns = "/rest_reg")
 public class RestRegServlet extends HttpServlet {
-    private final UserService userService = new JdbcUserService();
+    private final UserService userService = new UserServiceImpl();
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {

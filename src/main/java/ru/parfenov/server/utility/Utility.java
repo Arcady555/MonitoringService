@@ -6,7 +6,7 @@ import ru.parfenov.server.dto.PointValueToDtoMapper;
 import ru.parfenov.server.dto.PointValueToDtoMapperImpl;
 import ru.parfenov.server.model.PointValue;
 import ru.parfenov.server.model.User;
-import ru.parfenov.server.service.JdbcUserService;
+import ru.parfenov.server.service.UserServiceImpl;
 import ru.parfenov.server.service.UserService;
 import ru.parfenov.server.store.UserStore;
 
@@ -87,7 +87,7 @@ public class Utility {
                                           HttpServletResponse response,
                                           String login,
                                           PrintWriter out) {
-        UserService userService = new JdbcUserService();
+        UserService userService = new UserServiceImpl();
         String password = getUserPassword(request);
         if (userService.getByLogin(login) != null
                 && password.equals(userService.getByLogin(login).getPassword())) {

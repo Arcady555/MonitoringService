@@ -11,9 +11,9 @@ import ru.parfenov.server.model.User;
 import java.sql.SQLException;
 
 @Testcontainers
-class SqlUserStoreTest {
+class UserStoreImplTest {
     private static Connection testConnection;
-    private static SqlUserStore userStore;
+    private static UserStoreImpl userStore;
 
     @Container
     public static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:13")
@@ -40,7 +40,7 @@ class SqlUserStoreTest {
                 postgreSQLContainer.getJdbcUrl(),
                 postgreSQLContainer.getUsername(),
                 postgreSQLContainer.getPassword());
-        userStore = new SqlUserStore(testConnection);
+        userStore = new UserStoreImpl(testConnection);
         User user = new User(0, "Arcady", "password", "history");
         userStore.create(user);
     }

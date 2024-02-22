@@ -1,7 +1,7 @@
 package ru.parfenov.server.servlets.start.login.admin.adminmethods;
 
 import ru.parfenov.server.model.PointValue;
-import ru.parfenov.server.service.JdbcPointValueService;
+import ru.parfenov.server.service.PointValueServiceImpl;
 import ru.parfenov.server.service.PointValueService;
 
 import javax.servlet.ServletException;
@@ -16,7 +16,7 @@ import static ru.parfenov.server.utility.Utility.printOut;
 
 @WebServlet(name = "LastDataOfUserServlet", urlPatterns = "/last-data-of-user")
 public class LastDataOfUserServlet extends HttpServlet {
-    private final PointValueService pointValueService = new JdbcPointValueService();
+    private final PointValueService pointValueService = new PointValueServiceImpl();
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,

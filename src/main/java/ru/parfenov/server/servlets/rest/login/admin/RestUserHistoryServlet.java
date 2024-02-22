@@ -2,7 +2,7 @@ package ru.parfenov.server.servlets.rest.login.admin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.parfenov.server.dto.UserDto;
-import ru.parfenov.server.service.JdbcUserService;
+import ru.parfenov.server.service.UserServiceImpl;
 import ru.parfenov.server.service.UserService;
 
 import javax.servlet.ServletException;
@@ -18,7 +18,7 @@ import static ru.parfenov.server.utility.Utility.*;
 
 @WebServlet(name = "RestUserHistoryServlet", urlPatterns = "/rest_view-user-history")
 public class RestUserHistoryServlet extends HttpServlet {
-    private final UserService userService = new JdbcUserService();
+    private final UserService userService = new UserServiceImpl();
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException,

@@ -2,8 +2,7 @@ package ru.parfenov.server.servlets.start.login.admin.adminmethods;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.parfenov.server.dto.UserDto;
-import ru.parfenov.server.model.User;
-import ru.parfenov.server.service.JdbcUserService;
+import ru.parfenov.server.service.UserServiceImpl;
 import ru.parfenov.server.service.UserService;
 
 import javax.servlet.ServletException;
@@ -17,7 +16,7 @@ import java.util.List;
 
 @WebServlet(name = "GetAllUserServlet", urlPatterns = "/all-users")
 public class GetAllUserServlet extends HttpServlet {
-    private final UserService userService = new JdbcUserService();
+    private final UserService userService = new UserServiceImpl();
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,

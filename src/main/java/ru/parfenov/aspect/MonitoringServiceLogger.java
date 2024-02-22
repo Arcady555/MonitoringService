@@ -96,17 +96,7 @@ public class MonitoringServiceLogger {
     public void jdbcPointValueServiceValidationOnceInMonth() {
     }
 
-    @Around(
-            "sqlUserStoreGetAll() && sqlUserStoreFindById() && sqlUserStoreGetByLogin() "
-                    + "&& sqlUserStoreCreate() && sqlUserStoreInsertUserHistory() "
-                    + "&& sqlPointValueStoreCreate() && sqlPointValueStoreFindByUser() "
-                    + "&& sqlPointValueStoreGetLastData() && sqlPointValueStoreGetDataForSpecMonth() "
-                    + "&& jdbcUserServiceReg() && jdbcUserServiceEnter() && jdbcUserServiceViewAllUsers() "
-                    + "&& jdbcUserServiceViewUserHistory() && jdbcUserServiceGetByLogin() "
-                    + "&& jdbcPointValueServiceViewLastData() && jdbcPointValueServiceViewDataForSpecMonth() "
-                    + "&& jdbcPointValueServiceViewDataHistory() && jdbcPointValueServiceToOut() "
-                    + "&& jdbcPointValueServiceValidationOnceInMonth()"
-    )
+    @Around("execution(* *(..))")
     public void logCallMethod(ProceedingJoinPoint joinPoint) {
         String methodName = joinPoint.getSignature().getName();
         LOG.debug("Call method " + methodName + " " + LocalDateTime.now());

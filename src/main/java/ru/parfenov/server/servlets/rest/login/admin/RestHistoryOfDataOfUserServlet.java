@@ -3,8 +3,7 @@ package ru.parfenov.server.servlets.rest.login.admin;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.parfenov.server.dto.UserDto;
 import ru.parfenov.server.model.PointValue;
-import ru.parfenov.server.model.User;
-import ru.parfenov.server.service.JdbcPointValueService;
+import ru.parfenov.server.service.PointValueServiceImpl;
 import ru.parfenov.server.service.PointValueService;
 
 import javax.servlet.annotation.WebServlet;
@@ -20,7 +19,7 @@ import static ru.parfenov.server.utility.Utility.*;
 
 @WebServlet(name = "RestHistoryOfDataOfUserServlet", urlPatterns = "/rest_history-data-user")
 public class RestHistoryOfDataOfUserServlet extends HttpServlet {
-    private final PointValueService pointValueService = new JdbcPointValueService();
+    private final PointValueService pointValueService = new PointValueServiceImpl();
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
