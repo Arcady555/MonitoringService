@@ -22,7 +22,7 @@ public class AdminController {
         this.pointValueService = pointValueService;
     }
 
-    @GetMapping("/rest_all-users")
+    @GetMapping("/all-users")
     public ResponseEntity<List<UserDto>> findAllUsers() {
         try {
             userService.viewAllUsers();
@@ -32,7 +32,7 @@ public class AdminController {
         }
     }
 
-    @PostMapping("/rest_history-data-user")
+    @PostMapping("/history-data-user")
     public ResponseEntity<List<PointValueDto>> historyOfDataOfUser(@RequestBody String login) {
         try {
             return new ResponseEntity<>(
@@ -43,7 +43,7 @@ public class AdminController {
         }
     }
 
-    @PostMapping("/rest_last-data-of-user")
+    @PostMapping("/last-data-of-user")
     public ResponseEntity<List<PointValueDto>> lastDataOfUser(@RequestBody String login) {
         try {
             return new ResponseEntity<>(
@@ -54,7 +54,7 @@ public class AdminController {
         }
     }
 
-    @PostMapping("/rest_spec-month-user")
+    @PostMapping("/spec-month-user")
     public ResponseEntity<List<PointValueDto>> specMonthOfUser(
             @RequestBody String login, @RequestParam int month, @RequestParam int year) {
         try {
@@ -66,7 +66,7 @@ public class AdminController {
         }
     }
 
-    @PostMapping("/rest_user-history")
+    @PostMapping("/user-history")
     public ResponseEntity<String> userHistory(@RequestBody String login) {
         try {
             return new ResponseEntity<>(

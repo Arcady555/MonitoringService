@@ -1,25 +1,18 @@
 package ru.parfenov.server.utility;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.parfenov.server.dto.PointValueDto;
 import ru.parfenov.server.dto.PointValueToDtoMapper;
 import ru.parfenov.server.dto.PointValueToDtoMapperImpl;
 import ru.parfenov.server.model.PointValue;
 import ru.parfenov.server.model.User;
-import ru.parfenov.server.service.JdbcUserService;
 import ru.parfenov.server.store.UserStore;
 
 //import javax.servlet.http.HttpServletRequest;
 //import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
-import java.util.StringTokenizer;
 
 
 public class Utility {

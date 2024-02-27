@@ -20,7 +20,7 @@ public class PointValueController {
         this.pointValueService = pointValueService;
     }
 
-    @PostMapping("/rest_submit-data")
+    @PostMapping("/submit-data")
     public ResponseEntity<Void> submitData(@RequestBody List<PointValue> list) { //}, HttpSession session) {
         try {
          //   String login = session.getAttribute("login").toString(); /////////////////
@@ -31,7 +31,7 @@ public class PointValueController {
         }
     }
 
-    @GetMapping("/rest_spec-month")
+    @GetMapping("/spec-month")
     public ResponseEntity<List<PointValueDto>> specMonth(@RequestParam("username") String login,
                                                          @RequestParam("password") String password,
                                                          @RequestParam("month") int month,
@@ -45,7 +45,7 @@ public class PointValueController {
         }
     }
 
-    @GetMapping("/rest_last-data")
+    @GetMapping("/last-data")
     public ResponseEntity<List<PointValueDto>> lastData(@RequestParam("username") String login,
                                                          @RequestParam("password") String password) {
         try {
@@ -56,7 +56,7 @@ public class PointValueController {
         }
     }
 
-    @GetMapping("/rest_data-history")
+    @GetMapping("/data-history")
     public ResponseEntity<List<PointValueDto>> specMonth(@RequestParam("username") String login,
                                                          @RequestParam("password") String password) {
         try {
@@ -66,5 +66,4 @@ public class PointValueController {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
-
 }

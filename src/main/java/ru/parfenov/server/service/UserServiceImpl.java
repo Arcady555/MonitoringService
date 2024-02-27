@@ -19,13 +19,13 @@ import java.util.Optional;
 import static ru.parfenov.server.utility.Utility.fixTime;
 
 @Service
-public class JdbcUserService implements UserService {
-    private static final Logger LOG = LoggerFactory.getLogger(JdbcUserService.class.getName());
+public class UserServiceImpl implements UserService {
+    private static final Logger LOG = LoggerFactory.getLogger(UserServiceImpl.class.getName());
 
     private final UserStore userStore;
 
     @Autowired
-    public JdbcUserService(UserStore userStore) {
+    public UserServiceImpl(UserStore userStore) {
         this.userStore = userStore;
     }
 
@@ -82,7 +82,7 @@ public class JdbcUserService implements UserService {
                 result = userOptional.get().getHistory();
                 System.out.println(result);
             } else {
-                System.out.println("no user!");
+                LOG.error("No user!");
             }
             userStore.close();
         } catch (Exception e) {

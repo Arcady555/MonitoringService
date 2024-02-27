@@ -1,5 +1,6 @@
 package ru.parfenov.server.controller.reg;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +19,11 @@ public class RegController {
         this.userService = userService;
     }
 
-    @PostMapping("/rest_reg")
-    public ResponseEntity<Void> reg(@RequestBody User user) {
+    @PostMapping("/reg")
+    public ResponseEntity<Void> reg(@RequestBody String userJson) {
         try {
+            User user =
+                    new ObjectMapper().readValue(userJson, User.class);
             userService.reg(user.getLogin(), user.getPassword());
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {

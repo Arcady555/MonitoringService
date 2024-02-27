@@ -17,19 +17,19 @@ import java.util.Optional;
 import static ru.parfenov.server.utility.ConnectionUtility.loadConnection;
 
 @Repository
-public class SqlUserStore implements UserStore {
-    private static final Logger LOG = LoggerFactory.getLogger(SqlUserStore.class.getName());
+public class JdbcUserStore implements UserStore {
+    private static final Logger LOG = LoggerFactory.getLogger(JdbcUserStore.class.getName());
 
     private final Connection connection;
 
     @Autowired
-    public SqlUserStore() throws SQLException, ClassNotFoundException {
-        connection = loadConnection(SqlUserStore
+    public JdbcUserStore() throws SQLException, ClassNotFoundException {
+        connection = loadConnection(JdbcUserStore
                 .class.getClassLoader()
                 .getResourceAsStream("db/liquibase.properties"));
     }
 
-    public SqlUserStore(Connection connection) {
+    public JdbcUserStore(Connection connection) {
         this.connection = connection;
     }
 

@@ -16,18 +16,18 @@ import java.util.Optional;
 import static ru.parfenov.server.utility.ConnectionUtility.loadConnection;
 
 @Repository
-public class SqlPointValueStore implements PointValueStore {
-    private static final Logger LOG = LoggerFactory.getLogger(SqlPointValueStore.class.getName());
+public class JdbcPointValueStore implements PointValueStore {
+    private static final Logger LOG = LoggerFactory.getLogger(JdbcPointValueStore.class.getName());
     private final Connection connection;
 
     @Autowired
-    public SqlPointValueStore() throws SQLException, ClassNotFoundException {
-        connection = loadConnection(SqlPointValueStore
+    public JdbcPointValueStore() throws SQLException, ClassNotFoundException {
+        connection = loadConnection(JdbcPointValueStore
                 .class.getClassLoader()
                 .getResourceAsStream("db/liquibase.properties"));
     }
 
-    public SqlPointValueStore(Connection connection) {
+    public JdbcPointValueStore(Connection connection) {
         this.connection = connection;
     }
 

@@ -1,28 +1,6 @@
 package ru.parfenov.server.service;
 
-import org.junit.jupiter.api.*;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import ru.parfenov.server.dto.UserDto;
-import ru.parfenov.server.dto.UserToDtoMapper;
-import ru.parfenov.server.dto.UserToDtoMapperImpl;
-import ru.parfenov.server.model.User;
-import ru.parfenov.server.store.SqlUserStore;
-import ru.parfenov.server.store.UserStore;
-
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import static ru.parfenov.server.utility.Utility.fixTime;
 
 @Testcontainers
 class JdbcUserServiceTest {

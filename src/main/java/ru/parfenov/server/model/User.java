@@ -1,19 +1,15 @@
 package ru.parfenov.server.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class User {
     private Integer id;
     private String login;
     private String password;
     private String history;
-
-    public User() {
-    }
-
-    public User(int id, String login, String history) {
-        this.id = id;
-        this.login = login;
-        this.history = history;
-    }
 
     public User(int id, String login, String password, String history) {
         this.id = id;
@@ -22,35 +18,17 @@ public class User {
         this.history = history;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
+    public User(int id, String login, String history) {
         this.id = id;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
         this.login = login;
+        this.history = history;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
+    public User(String login, String password) {
+        this.login = login;
         this.password = password;
     }
 
-    public String getHistory() {
-        return history;
-    }
-
-    public void setHistory(String history) {
-        this.history = history;
+    public User() {
     }
 }

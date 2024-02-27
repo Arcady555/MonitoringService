@@ -1,6 +1,5 @@
 package ru.parfenov.server.service;
 
-import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +21,13 @@ import static ru.parfenov.server.utility.Utility.fixTime;
 import static ru.parfenov.server.utility.Utility.getListDto;
 
 @Service
-public class JdbcPointValueService implements PointValueService {
-    private static final Logger LOG = LoggerFactory.getLogger(JdbcPointValueService.class.getName());
+public class PointValueServiceImpl implements PointValueService {
+    private static final Logger LOG = LoggerFactory.getLogger(PointValueServiceImpl.class.getName());
     private final UserStore userStore;
     private final PointValueStore pointValueStore;
 
     @Autowired
-    public JdbcPointValueService(UserStore userStore, PointValueStore pointValueStore) {
+    public PointValueServiceImpl(UserStore userStore, PointValueStore pointValueStore) {
         this.userStore = userStore;
         this.pointValueStore = pointValueStore;
     }
@@ -47,7 +46,7 @@ public class JdbcPointValueService implements PointValueService {
 
                 }
             } else {
-                System.out.println("no user!!!");
+                LOG.error("No user!");
             }
             userStore.close();
             pointValueStore.close();
@@ -65,7 +64,7 @@ public class JdbcPointValueService implements PointValueService {
             if (userId != -1) {
                 Optional<List<PointValue>> data = pointValueStore.getLastData(userId);
                 if (data.isEmpty()) {
-                    System.out.println("No data!!!" + System.lineSeparator());
+                    LOG.error("No data!");
                 } else {
                     List<PointValue> list = data.get();
                     listResult = Utility.getListDto(list);
@@ -73,7 +72,7 @@ public class JdbcPointValueService implements PointValueService {
                 }
                 fixTime(userStore, login, "view last data");
             } else {
-                System.out.println("no user!!!");
+                LOG.error("No user!");
             }
             userStore.close();
             pointValueStore.close();
@@ -98,7 +97,7 @@ public class JdbcPointValueService implements PointValueService {
             if (userOptional.isPresent()) {
                 Optional<List<PointValue>> data = pointValueStore.getDataForSpecMonth(userOptional.get(), date);
                 if (data.isEmpty()) {
-                    System.out.println("No data!!!" + System.lineSeparator());
+                    LOG.error("No data!");
                 } else {
                     List<PointValue> list = data.get();
                     listResult = getListDto(list);
@@ -108,7 +107,7 @@ public class JdbcPointValueService implements PointValueService {
                 }
                 fixTime(userStore, login, "view data for spec month");
             } else {
-                System.out.println("no user!!!");
+                LOG.error("No user!");
             }
             userStore.close();
             pointValueStore.close();
@@ -130,11 +129,11 @@ public class JdbcPointValueService implements PointValueService {
                     listResult = getListDto(list);
                   //  printDataFromDataStore(list);
                 } else {
-                    System.out.println("No data!!!" + System.lineSeparator());
+                    LOG.error("No data!");
                 }
                 fixTime(userStore, login, "view data history");
             } else {
-                System.out.println("no user!!!");
+                LOG.error("No user!");
             }
             userStore.close();
             pointValueStore.close();
@@ -152,7 +151,6 @@ public class JdbcPointValueService implements PointValueService {
         } catch (Exception e) {
             LOG.error("Exception:", e);
         }
-
     }
 
     /**
@@ -221,7 +219,7 @@ public class JdbcPointValueService implements PointValueService {
                 }
             }
         } else {
-            System.out.println("no user!!!");
+            LOG.error("No user!");
         }
         userStore.close();
     }
