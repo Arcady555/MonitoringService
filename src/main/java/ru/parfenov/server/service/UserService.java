@@ -1,48 +1,18 @@
 package ru.parfenov.server.service;
 
+import ru.parfenov.server.dto.UserDto;
 import ru.parfenov.server.model.User;
-import ru.parfenov.server.store.UserStore;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
+import java.util.List;
 
-import static ru.parfenov.server.utility.Utility.fixTime;
+public interface UserService {
+    void reg(String login, String password);
 
-public class UserService {
-    private final UserStore userStore;
+    String enter(String login);
 
-    public UserService(UserStore memUserStore) {
-        this.userStore = memUserStore;
-    }
+    List<UserDto> viewAllUsers();
 
-    public void reg(String login, String password) {
-        User user = new User();
-        user.setLogin(login);
-        user.setPassword(password);
-        user.setHistory(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES)
-                + " registration"
-                + System.lineSeparator());
-        userStore.create(user);
-    }
+    String viewUserHistory(String login);
 
-    public String enter(String login) {
-        fixTime(userStore, login, "enter");
-        return login;
-    }
-
-    public void viewAllUsers() {
-        for (User user : userStore.getAll()) {
-            System.out.println(user.getId() + " " + user.getLogin());
-        }
-        System.out.println(System.lineSeparator());
-    }
-
-    public void viewUserHistory(String login) {
-        User user = userStore.getByLogin(login);
-        System.out.println(user.getHistory());
-    }
-
-    public User getByLogin(String login) {
-        return userStore.getByLogin(login);
-    }
+    User getByLogin(String login);
 }

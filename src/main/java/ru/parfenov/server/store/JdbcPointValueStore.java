@@ -1,31 +1,41 @@
 package ru.parfenov.server.store;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import ru.parfenov.server.model.PointValue;
 import ru.parfenov.server.model.User;
 
-import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static ru.parfenov.server.utility.Utility.loadConnection;
+import static ru.parfenov.server.utility.ConnectionUtility.loadConnection;
 
-public class SqlDataStore implements DataStore {
+@Repository
+public class JdbcPointValueStore implements PointValueStore {
+    private static final Logger LOG = LoggerFactory.getLogger(JdbcPointValueStore.class.getName());
     private final Connection connection;
 
-    public SqlDataStore() throws Exception {
-        InputStream in = SqlDataStore.class.getClassLoader()
-                .getResourceAsStream("db/liquibase.properties");
-        this.connection = loadConnection(in);
+    @Autowired
+    public JdbcPointValueStore() throws SQLException, ClassNotFoundException {
+        connection = loadConnection(JdbcPointValueStore
+                .class.getClassLoader()
+                .getResourceAsStream("db/liquibase.properties"));
     }
 
-    public SqlDataStore(Connection connection) throws Exception {
+    public JdbcPointValueStore(Connection connection) {
         this.connection = connection;
+    }
+
+    @Override
+    public void close() throws Exception {
+        if (connection != null) {
+            connection.close();
+        }
     }
 
     @Override
@@ -39,15 +49,16 @@ public class SqlDataStore implements DataStore {
             statement.setInt(4, pointValue.getValue());
             statement.execute();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Exception:", e);
         }
     }
 
     @Override
     public Optional<List<PointValue>> findByUser(User user) {
         List<PointValue> points = new ArrayList<>();
-        try (PreparedStatement statement = connection
-                .prepareStatement("SELECT * FROM point_value where user_id=?")) {
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT id, user_id, date, point, \"value\" FROM point_value where user_id=?")
+        ) {
             statement.setInt(1, user.getId());
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
@@ -61,7 +72,7 @@ public class SqlDataStore implements DataStore {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Exception:", e);
         }
         return points.size() != 0 ? Optional.of(points) : Optional.empty();
     }
@@ -69,8 +80,8 @@ public class SqlDataStore implements DataStore {
     @Override
     public Optional<List<PointValue>> getLastData(int userId) {
         List<PointValue> points = new ArrayList<>();
-        try (PreparedStatement statement = connection
-                .prepareStatement("SELECT *"
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT id, user_id, date, point, \"value\""
                         + "  FROM point_value where user_id=? and date=(SELECT date"
                         + "  FROM point_value where user_id=?"
                         + "  ORDER BY date DESC"
@@ -89,7 +100,7 @@ public class SqlDataStore implements DataStore {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Exception:", e);
         }
         return points.size() != 0 ? Optional.of(points) : Optional.empty();
     }

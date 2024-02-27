@@ -6,13 +6,14 @@
 
     <groupId>ru.parfenov</groupId>
     <artifactId>MonitoringService</artifactId>
+    <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
 
     <profiles>
         <profile>
             <id>test</id>
             <properties>
-                <liquibase.changeLogFile>src/main/resources/db/changelog.xml</liquibase.changeLogFile>
+                <liquibase.changeLogFile>db/changelog.xml</liquibase.changeLogFile>
                 <liquibase.url>jdbc:h2:./testdb;MODE=PostgreSQL;CASE_INSENSITIVE_IDENTIFIERS=TRUE;</liquibase.url>
                 <liquibase.username></liquibase.username>
                 <liquibase.password></liquibase.password>
@@ -24,7 +25,7 @@
         <profile>
             <id>production</id>
             <properties>
-                <liquibase.changeLogFile>src/main/resources/db/changelog.xml</liquibase.changeLogFile>
+                <liquibase.changeLogFile>db/changelog.xml</liquibase.changeLogFile>
                 <liquibase.url>jdbc:postgresql://127.0.0.1:5432/monitoring_service</liquibase.url>
                 <liquibase.username>postgres</liquibase.username>
                 <liquibase.password>password</liquibase.password>
@@ -33,7 +34,7 @@
         <profile>
             <id>docker</id>
             <properties>
-                <liquibase.changeLogFile>src/main/resources/db/changelog.xml</liquibase.changeLogFile>
+                <liquibase.changeLogFile>db/changelog.xml</liquibase.changeLogFile>
                 <liquibase.url>${docker.db.url.jdbc}</liquibase.url>
                 <liquibase.username>${docker.db.username.jdbc}</liquibase.username>
                 <liquibase.password>${docker.db.password.jdbc}</liquibase.password>
@@ -52,11 +53,43 @@
         <testcontainers.version>1.19.4</testcontainers.version>
         <testcontainers.jupiter.version>1.19.4</testcontainers.jupiter.version>
         <testcontainers.postgresql.version>1.17.6</testcontainers.postgresql.version>
-
+        <javax.servlet.version>4.0.1</javax.servlet.version>
+        <gson.version>2.10</gson.version>
+        <jackson.version>2.15.1</jackson.version>
+        <mapstruct.version>1.4.2.Final</mapstruct.version>
+        <aspectj.version>1.9.20.1</aspectj.version>
+        <log4j.version>1.2.17</log4j.version>
+        <slf4j-log4j12.version>2.0.5</slf4j-log4j12.version>
+        <spring.version>6.1.1</spring.version>
+        <lombok.version>1.18.26</lombok.version>
+        <spring-security.version>5.3.4.RELEASE</spring-security.version>
+        <auth0.version>3.4.0</auth0.version>
+     <!--   <mapstruct-lombok.version>0.2.0</mapstruct-lombok.version> -->
     </properties>
 
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
+
+     <!--   <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>${spring-security.version}</version>
+        </dependency> -->
+     <!--   <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>${spring-security.version}</version>
+        </dependency> -->
+     <!--   <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>${spring-security.version}</version>
+        </dependency> -->
+   <!--     <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>${auth0.version}</version>
+        </dependency> -->
+
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -104,11 +137,105 @@
             <scope>test</scope>
         </dependency>
 
+    <!--    <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${javax.servlet.version}</version>
+            <scope>provided</scope>
+        </dependency> -->
+
+     <!--   <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>6.0.0</version>
+            <scope>provided</scope>
+        </dependency> -->
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${mapstruct.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>${aspectj.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${slf4j-log4j12.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+    <!--    <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok-mapstruct-binding</artifactId>
+            <version>${mapstruct-lombok.version}</version>
+        </dependency> -->
+
+   <!--
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>${spring-beans.version}</version>
+        </dependency>   -->
+
+    <!--    <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring.version}</version>
+        </dependency> -->
+
+  <!--      <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring-core.version}</version>
+        </dependency> -->
+
+    <!--    <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring.version}</version>
+        </dependency>  -->
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
+        <finalName>ms</finalName>
         <plugins>
-
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.3.1</version>
+            </plugin>
             <plugin>
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
@@ -128,13 +255,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <compilerVersion>17</compilerVersion>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -208,6 +328,25 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${mapstruct.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
             </plugin>
         </plugins>
     </build>
