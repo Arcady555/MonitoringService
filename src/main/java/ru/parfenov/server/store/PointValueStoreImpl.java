@@ -1,5 +1,6 @@
 package ru.parfenov.server.store;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.parfenov.server.model.PointValue;
@@ -13,8 +14,8 @@ import java.util.Optional;
 
 import static ru.parfenov.server.utility.ConnectionUtility.loadConnection;
 
+@Slf4j
 public class PointValueStoreImpl implements PointValueStore {
-    private static final Logger LOG = LoggerFactory.getLogger(PointValueStoreImpl.class.getName());
     private final Connection connection;
 
     public PointValueStoreImpl() throws SQLException, ClassNotFoundException {
@@ -45,7 +46,7 @@ public class PointValueStoreImpl implements PointValueStore {
             statement.setInt(4, pointValue.getValue());
             statement.execute();
         } catch (Exception e) {
-            LOG.error("Exception:", e);
+            log.error("Exception:", e);
         }
     }
 
@@ -68,7 +69,7 @@ public class PointValueStoreImpl implements PointValueStore {
                 }
             }
         } catch (Exception e) {
-            LOG.error("Exception:", e);
+            log.error("Exception:", e);
         }
         return points.size() != 0 ? Optional.of(points) : Optional.empty();
     }
@@ -96,7 +97,7 @@ public class PointValueStoreImpl implements PointValueStore {
                 }
             }
         } catch (Exception e) {
-            LOG.error("Exception:", e);
+            log.error("Exception:", e);
         }
         return points.size() != 0 ? Optional.of(points) : Optional.empty();
     }
@@ -114,6 +115,8 @@ public class PointValueStoreImpl implements PointValueStore {
                     resultOptional = Optional.of(result);
                 }
             }
+        } else {
+            log.error("No data!!!");
         }
         return resultOptional;
     }

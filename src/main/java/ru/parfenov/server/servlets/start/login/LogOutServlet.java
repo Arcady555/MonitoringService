@@ -13,6 +13,6 @@ public class LogOutServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         request.getSession(false).invalidate();
-        response.sendRedirect("/Mo/login");
+        response.sendRedirect("/ms/login");
     }
 }

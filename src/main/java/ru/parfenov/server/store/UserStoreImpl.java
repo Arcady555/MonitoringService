@@ -1,5 +1,6 @@
 package ru.parfenov.server.store;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.parfenov.server.model.User;
@@ -14,8 +15,8 @@ import java.util.Optional;
 
 import static ru.parfenov.server.utility.ConnectionUtility.loadConnection;
 
+@Slf4j
 public class UserStoreImpl implements UserStore {
-    private static final Logger LOG = LoggerFactory.getLogger(UserStoreImpl.class.getName());
     private final Connection connection;
 
     public UserStoreImpl() throws SQLException, ClassNotFoundException {
@@ -46,7 +47,7 @@ public class UserStoreImpl implements UserStore {
                 }
             }
         } catch (Exception e) {
-            LOG.error("Exception:", e);
+            log.error("Exception:", e);
         }
         return users;
     }
@@ -62,7 +63,7 @@ public class UserStoreImpl implements UserStore {
                 }
             }
         } catch (Exception e) {
-            LOG.error("Exception:", e);
+            log.error("Exception:", e);
         }
         return user;
     }
@@ -78,7 +79,7 @@ public class UserStoreImpl implements UserStore {
                 }
             }
         } catch (Exception e) {
-            LOG.error("Exception:", e);
+            log.error("Exception:", e);
         }
         return user;
     }
@@ -93,7 +94,7 @@ public class UserStoreImpl implements UserStore {
             statement.setString(3, user.getHistory());
             statement.execute();
         } catch (Exception e) {
-            LOG.error("Exception:", e);
+            log.error("Exception:", e);
         }
     }
 
@@ -106,7 +107,7 @@ public class UserStoreImpl implements UserStore {
             statement.setInt(2, user.getId());
             statement.execute();
         } catch (Exception e) {
-            LOG.error("Exception:", e);
+            log.error("Exception:", e);
         }
     }
 

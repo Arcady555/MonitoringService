@@ -26,6 +26,6 @@ public class RegServlet extends HttpServlet {
         String password = request.getParameter("password");
         userService.reg(login, password);
         // Mo
-        response.sendRedirect("/Mo/login");
+        response.sendRedirect("/ms/login");
     }
 }

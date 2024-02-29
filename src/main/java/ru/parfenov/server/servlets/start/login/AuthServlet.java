@@ -35,10 +35,10 @@ public class AuthServlet extends HttpServlet {
             session.setAttribute("login", login);
             if (user.getLogin().equals("admin")) {
                 //Mo
-                response.sendRedirect("/Mo/admin");
+                response.sendRedirect("/ms/admin");
             } else {
                 //Mo
-                response.sendRedirect("/Mo/client");
+                response.sendRedirect("/ms/client");
             }
         } else {
             request.setAttribute("error", "invalid login");

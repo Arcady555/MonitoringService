@@ -1,7 +1,7 @@
 package ru.parfenov.server.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+
 import ru.parfenov.server.model.PointValue;
 import ru.parfenov.server.model.User;
 import ru.parfenov.server.store.PointValueStore;
@@ -17,8 +17,8 @@ import java.util.Optional;
 
 import static ru.parfenov.server.utility.Utility.fixTime;
 
+@Slf4j
 public class PointValueServiceImpl implements PointValueService {
-    private static final Logger LOG = LoggerFactory.getLogger(PointValueServiceImpl.class.getName());
 
     @Override
     public void submitData(String login, List<PointValue> list) {
@@ -41,7 +41,7 @@ public class PointValueServiceImpl implements PointValueService {
             userStore.close();
             pointValueStore.close();
         } catch (Exception e) {
-            LOG.error("Exception:", e);
+            log.error("Exception:", e);
         }
     }
 
@@ -63,12 +63,12 @@ public class PointValueServiceImpl implements PointValueService {
                 }
                 fixTime(userStore, login, "view last data");
             } else {
-                System.out.println("no user!!!");
+                log.error("no user!!!");
             }
             userStore.close();
             pointValueStore.close();
         } catch (Exception e) {
-            LOG.error("Exception:", e);
+            log.error("Exception:", e);
         }
         return listResult;
     }
@@ -90,7 +90,7 @@ public class PointValueServiceImpl implements PointValueService {
             if (userOptional.isPresent()) {
                 Optional<List<PointValue>> data = pointValueStore.getDataForSpecMonth(userOptional.get(), date);
                 if (data.isEmpty()) {
-                    System.out.println("No data!!!" + System.lineSeparator());
+                    log.error("No data!!!");
                 } else {
                     listResult = data.get();
                     printDataFromDataStore(listResult);
@@ -104,7 +104,7 @@ public class PointValueServiceImpl implements PointValueService {
             userStore.close();
             pointValueStore.close();
         } catch (Exception e) {
-            LOG.error("Exception:", e);
+            log.error("Exception:", e);
         }
         return listResult;
     }
@@ -131,7 +131,7 @@ public class PointValueServiceImpl implements PointValueService {
             userStore.close();
             pointValueStore.close();
         } catch (Exception e) {
-            LOG.error("Exception:", e);
+            log.error("Exception:", e);
         }
         return listResult;
     }
@@ -143,7 +143,7 @@ public class PointValueServiceImpl implements PointValueService {
             fixTime(userStore, login, "out");
             userStore.close();
         } catch (Exception e) {
-            LOG.error("Exception:", e);
+            log.error("Exception:", e);
         }
 
     }

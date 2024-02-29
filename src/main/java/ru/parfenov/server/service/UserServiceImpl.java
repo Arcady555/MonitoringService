@@ -1,5 +1,6 @@
 package ru.parfenov.server.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.parfenov.server.dto.UserDto;
@@ -17,8 +18,8 @@ import java.util.Optional;
 
 import static ru.parfenov.server.utility.Utility.fixTime;
 
+@Slf4j
 public class UserServiceImpl implements UserService {
-    private static final Logger LOG = LoggerFactory.getLogger(UserServiceImpl.class.getName());
 
     @Override
     public void reg(String login, String password) {
@@ -33,7 +34,7 @@ public class UserServiceImpl implements UserService {
             userStore.create(user);
             userStore.close();
         } catch (Exception e) {
-            LOG.error("Exception:", e);
+            log.error("Exception:", e);
         }
     }
 
@@ -44,7 +45,7 @@ public class UserServiceImpl implements UserService {
             fixTime(userStore, login, "enter");
             userStore.close();
         } catch (Exception e) {
-            LOG.error("Exception:", e);
+            log.error("Exception:", e);
         }
         return login;
     }
@@ -62,7 +63,7 @@ public class UserServiceImpl implements UserService {
             }
             userStore.close();
         } catch (Exception e) {
-            LOG.error("Exception:", e);
+            log.error("Exception:", e);
         }
         return listDto;
     }
@@ -81,7 +82,7 @@ public class UserServiceImpl implements UserService {
             }
             userStore.close();
         } catch (Exception e) {
-            LOG.error("Exception:", e);
+            log.error("Exception:", e);
         }
         return result;
     }
@@ -95,7 +96,7 @@ public class UserServiceImpl implements UserService {
             user = userOptional.orElse(null);
             userStore.close();
         } catch (Exception e) {
-            LOG.error("Exception:", e);
+            log.error("Exception:", e);
         }
         return user;
     }
