@@ -1,6 +1,6 @@
 package ru.parfenov.aspect;
 
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -9,102 +9,101 @@ import org.aspectj.lang.annotation.Pointcut;
 import java.time.LocalDateTime;
 
 @Aspect
+@Slf4j
 public class MonitoringServiceLogger {
-    private final static Logger LOG =
-            Logger.getLogger("MonitoringServiceLogger.class");
 
-    @Pointcut("execution(* SqlUserStore.getAll())")
-    public void sqlUserStoreGetAll() {
+    @Pointcut("execution(* UserStoreImpl.getAll())")
+    public void userStoreImplGetAll() {
     }
 
-    @Pointcut("@annotation(* SqlUserStore.findById(int userId))")
-    public void sqlUserStoreFindById() {
+    @Pointcut("@annotation(* UserStoreImpl.findById(int userId))")
+    public void userStoreImplFindById() {
     }
 
-    @Pointcut("@annotation(* SqlUserStore.getByLogin(String login))")
-    public void sqlUserStoreGetByLogin() {
+    @Pointcut("@annotation(* UserStoreImpl.getByLogin(String login))")
+    public void userStoreImplGetByLogin() {
     }
 
-    @Pointcut("@annotation(* SqlUserStore.create(User user))")
-    public void sqlUserStoreCreate() {
+    @Pointcut("@annotation(* UserStoreImpl.create(User user))")
+    public void userStoreImplCreate() {
     }
 
-    @Pointcut("@annotation(* SqlUserStore.insertUserHistory(User user, String newHistory))")
-    public void sqlUserStoreInsertUserHistory() {
-    }
-
-
-    @Pointcut("@annotation(* SqlPointValueStore.create(PointValue pointValue))")
-    public void sqlPointValueStoreCreate() {
-    }
-
-    @Pointcut("@annotation(* SqlPointValueStore.findByUser(User user))")
-    public void sqlPointValueStoreFindByUser() {
-    }
-
-    @Pointcut("@annotation(* SqlPointValueStore.getLastData(int userId))")
-    public void sqlPointValueStoreGetLastData() {
-    }
-
-    @Pointcut("@annotation(* SqlPointValueStore.getDataForSpecMonth(User user, LocalDateTime date))")
-    public void sqlPointValueStoreGetDataForSpecMonth() {
+    @Pointcut("@annotation(* UserStoreImpl.insertUserHistory(User user, String newHistory))")
+    public void userStoreImplInsertUserHistory() {
     }
 
 
-    @Pointcut("@annotation(* JdbcUserService.reg(String login, String password))")
-    public void jdbcUserServiceReg() {
+    @Pointcut("@annotation(* PointValueStoreImpl.create(PointValue pointValue))")
+    public void pointValueStoreImplCreate() {
     }
 
-    @Pointcut("@annotation(* JdbcUserService.enter(String login))")
-    public void jdbcUserServiceEnter() {
+    @Pointcut("@annotation(* PointValueStoreImpl.findByUser(User user))")
+    public void pointValueStoreImplFindByUser() {
     }
 
-    @Pointcut("@annotation(* JdbcUserService.viewAllUsers())")
-    public void jdbcUserServiceViewAllUsers() {
+    @Pointcut("@annotation(* PointValueStoreImpl.getLastData(int userId))")
+    public void pointValueStoreImplGetLastData() {
     }
 
-    @Pointcut("@annotation(* JdbcUserService.viewUserHistory(String login))")
-    public void jdbcUserServiceViewUserHistory() {
-    }
-
-    @Pointcut("@annotation(* JdbcUserService.getByLogin(String login))")
-    public void jdbcUserServiceGetByLogin() {
+    @Pointcut("@annotation(* PointValueStoreImpl.getDataForSpecMonth(User user, LocalDateTime date))")
+    public void pointValueStoreImplGetDataForSpecMonth() {
     }
 
 
-    @Pointcut("@annotation(* JdbcPointValueService.submitData(String login, List<PointValue> list))")
-    public void jdbcPointValueServiceSubmitData() {
+    @Pointcut("@annotation(* UserServiceImpl.reg(String login, String password))")
+    public void UserServiceImplReg() {
     }
 
-    @Pointcut("@annotation(* JdbcPointValueService.viewLastData(String login))")
-    public void jdbcPointValueServiceViewLastData() {
+    @Pointcut("@annotation(* UserServiceImpl.enter(String login))")
+    public void userServiceImplEnter() {
     }
 
-    @Pointcut("@annotation(* JdbcPointValueService.viewDataForSpecMonth(String login, int month, int year))")
-    public void jdbcPointValueServiceViewDataForSpecMonth() {
+    @Pointcut("@annotation(* UserServiceImpl.viewAllUsers())")
+    public void userServiceImplViewAllUsers() {
     }
 
-    @Pointcut("@annotation(* JdbcPointValueService.viewDataHistory(String login))")
-    public void jdbcPointValueServiceViewDataHistory() {
+    @Pointcut("@annotation(* UserServiceImpl.viewUserHistory(String login))")
+    public void userServiceImplViewUserHistory() {
     }
 
-    @Pointcut("@annotation(* JdbcPointValueService.toOut(String login))")
-    public void jdbcPointValueServiceToOut() {
+    @Pointcut("@annotation(* UserServiceImpl.getByLogin(String login))")
+    public void userServiceImplGetByLogin() {
     }
 
-    @Pointcut("@annotation(* JdbcPointValueService.validationOnceInMonth(String login))")
-    public void jdbcPointValueServiceValidationOnceInMonth() {
+
+    @Pointcut("@annotation(* PointValueServiceImpl.submitData(String login, List<PointValue> list))")
+    public void pointValueServiceImplSubmitData() {
+    }
+
+    @Pointcut("@annotation(* PointValueServiceImpl.viewLastData(String login))")
+    public void pointValueServiceImplViewLastData() {
+    }
+
+    @Pointcut("@annotation(* PointValueServiceImpl.viewDataForSpecMonth(String login, int month, int year))")
+    public void pointValueServiceImplViewDataForSpecMonth() {
+    }
+
+    @Pointcut("@annotation(* PointValueServiceImpl.viewDataHistory(String login))")
+    public void pointValueServiceImplViewDataHistory() {
+    }
+
+    @Pointcut("@annotation(* PointValueServiceImpl.toOut(String login))")
+    public void pointValueServiceImplToOut() {
+    }
+
+    @Pointcut("@annotation(* PointValueServiceImpl.validationOnceInMonth(String login))")
+    public void pointValueServiceImplValidationOnceInMonth() {
     }
 
     @Around("execution(* *(..))")
     public void logCallMethod(ProceedingJoinPoint joinPoint) {
         String methodName = joinPoint.getSignature().getName();
-        LOG.debug("Call method " + methodName + " " + LocalDateTime.now());
+        log.debug("Call method " + methodName + " " + LocalDateTime.now());
         try {
             joinPoint.proceed();
-            LOG.debug("End method " + methodName + " " + LocalDateTime.now());
+            log.debug("End method " + methodName + " " + LocalDateTime.now());
         } catch (Throwable e) {
-            LOG.error("Exception:", e);
+            log.error("Exception:", e);
         }
     }
 }
